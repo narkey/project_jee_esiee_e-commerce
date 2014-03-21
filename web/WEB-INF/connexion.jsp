@@ -26,7 +26,7 @@
 			</div>
 			
 			<div class="form-group">
-				<label class="control-label col-sm-2" for="email">test Mot de passe</label>
+				<label class="control-label col-sm-2" for="email">testtr Mot de passe</label>
 				<div class="col-sm-10">
 				<input class="form-control" type="password" id="email" data-toggle="tooltip" data-placement="bottom" title="Veuillez renseigner votre mot de passe" name="password" value="<c:out value="${utilisateur.mdp}"/>"/>
 				</div>
