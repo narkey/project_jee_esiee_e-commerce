@@ -53,10 +53,21 @@ public class ControleurServlet extends HttpServlet {
     	case "/Inscription" : this.getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
 		break;
     	case "/Catalogue" : 
-            System.out.println("pouet0");
-
             ArrayList<Livre> listBook= new ArrayList<Livre>();
-            listBook = dao.getAllBook();
+            System.out.println(request.getParameter("cat"));
+            String category = request.getParameter("cat");
+            if(category.equals("manga")||category.equals("bd")||category.equals("comic"))
+                {
+                    listBook = dao.getCategoryBook(request.getParameter("cat"));
+                    System.out.println("ya une categorie");
+                }
+               
+            
+            else
+            {
+                listBook = dao.getAllBook();
+                System.out.println("ya pas une categorie");
+            }
             for(Livre object: listBook){
               System.out.println(object.toString());
             }

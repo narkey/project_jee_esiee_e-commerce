@@ -34,7 +34,7 @@
 			<td><c:out value="${book.auteur}" /></td>
 			<td><c:out value="${book.description}" /></td>
 			<td><c:out value="${book.prix}" /></td>
-                        <td><button type="submit" class="btn btn-primary" name="book_id" value="${book.id}">Acheter</td>
+                        <td><button type="submit" class="btn btn-primary" name="book_id" value="${book.id}">Ajouter au panier</td>
 		</tr>
 	</c:forEach>
 	</tbody>

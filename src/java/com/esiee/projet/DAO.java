@@ -39,7 +39,7 @@ public class DAO {
     private static final String SQL_SELECT_ALLBOOK = 
     "SELECT * FROM TUTU.LIVRES";
     
-    private static final String SQL_SELECT_BOOK = 
+    private static final String SQL_SELECT_CATEGORY_BOOK = 
     "SELECT * FROM TUTU.LIVRES WHERE CATEGORIE = ?";
     
     /**
@@ -162,7 +162,32 @@ public class DAO {
         
         return list;
         
-     }    
+     }
+     public ArrayList<Livre> getCategoryBook(String cat)
+     {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        ArrayList<Livre> list = new ArrayList<Livre>();
+        
+        try {
+            preparedStatement = initialisationRequetePreparee( this.connection, SQL_SELECT_CATEGORY_BOOK, true, cat);
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+
+                //L'utilisateur a été trouvé dans notre base"
+                list.add(map_livre( resultSet ));
+
+            }
+
+            resultSet.close();
+            } catch(SQLException sqle) {
+                System.err.println("" + sqle);
+            }
+
+        return list;
+        
+     }   
     public static PreparedStatement initialisationRequetePreparee(Connection connexion, String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException 
     {
         PreparedStatement preparedStatement = connexion.prepareStatement( sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS );

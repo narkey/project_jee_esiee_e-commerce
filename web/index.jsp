@@ -18,9 +18,9 @@
         <h1>Choisissez votre cat&eacute;gorie</h1>
         <!--<div class="container container-fluid">
         <abbr title="attribute">attr</abbr>-->
-        <a href="#">BD franco-belge</a><br/>
-        <a href="#">Comic am&eacute;ricain</a><br/>
-        <a href="#">Manga japonais</a><br/>
+        <a href="/project_jee/Catalogue?cat=bd">BD franco-belge</a><br/>
+        <a href="/project_jee/Catalogue?cat=comic">Comic am&eacute;ricain</a><br/>
+        <a href="/project_jee/Catalogue?cat=manga">Manga japonais</a><br/>
         <a href="/project_jee/Catalogue">Tous</a><br/>
         </div>
     </body>
