@@ -54,9 +54,12 @@ public class ControleurServlet extends HttpServlet {
 		break;
     	case "/Catalogue" : 
             System.out.println("pouet0");
+
             ArrayList<Livre> listBook= new ArrayList<Livre>();
             listBook = dao.getAllBook();
-            System.out.println("pouet"+listBook.toString());
+            for(Livre object: listBook){
+              System.out.println(object.toString());
+            }
             request.setAttribute("list_book", listBook);
             this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp").forward(request, response);
             break;            

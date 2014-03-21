@@ -16,8 +16,8 @@ public class Manga extends Livre{
         super();
     }
 
-    public Manga(String titre, String auteur, String genre, String description, float prix) {
-        super(titre, auteur, genre, description, prix);
+    public Manga(int id, String titre, String auteur, String genre, String description, float prix) {
+        super(id, titre, auteur, genre, description, prix);
     }
     
 }

@@ -11,6 +11,7 @@ package com.esiee.projet;
  * @author tithf
  */
 public  class Livre {
+    protected int id;
     protected String titre;
     protected String auteur;
     protected String genre;
@@ -18,6 +19,7 @@ public  class Livre {
     protected float prix;
 
     public Livre() {
+        this.id=-1;
         this.titre = "";
         this.auteur = "";
         this.genre = "";
@@ -25,14 +27,23 @@ public  class Livre {
         this.prix = -1;
     }
         
-    public Livre(String titre, String auteur, String genre, String description, float prix) {
+    public Livre(int id, String titre, String auteur, String genre, String description, float prix) {
+        this.id = id;
         this.titre = titre;
         this.auteur = auteur;
         this.genre = genre;
         this.description = description;
         this.prix = prix;
     }
+    
+    public int getId() {
+        return this.id;
+    }
 
+    public void setTitre(int id) {
+        this.id = id;
+    }
+    
     public String getTitre() {
         return titre;
     }
@@ -71,5 +82,10 @@ public  class Livre {
 
     public void setPrix(float prix) {
         this.prix = prix;
+    }
+    
+    public String toString(){
+        String info_livre = "Le titre du livre est " + this.titre + " de " + this.auteur;
+        return info_livre;
     }
 }

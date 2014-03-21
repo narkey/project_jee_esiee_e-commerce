@@ -98,7 +98,6 @@ public class DAO {
         preparedStatement = initialisationRequetePreparee( this.connection, SQL_SELECT_PK, true, email );
         resultSet = preparedStatement.executeQuery();
             
-           
         if(resultSet.next()) {
                     
             //L'utilisateur a été trouvé dans notre base"
@@ -190,7 +189,7 @@ public class DAO {
     }
     private static Livre map_livre( ResultSet resultSet ) throws SQLException {
          
-        Livre livre = new Livre(
+        Livre livre = new Livre(    resultSet.getInt( "ID" ),
                                     resultSet.getString( "TITRE" ),
                                     resultSet.getString( "AUTEUR" ),
                                     resultSet.getString( "GENRE" ),
@@ -202,7 +201,7 @@ public class DAO {
     
     private static Bd map_bd( ResultSet resultSet ) throws SQLException {
          
-       Bd bd = new Bd(
+       Bd bd = new Bd(resultSet.getInt( "ID" ),
                                     resultSet.getString( "TITRE" ),
                                     resultSet.getString( "AUTEUR" ),
                                     resultSet.getString( "GENRE" ),
@@ -214,7 +213,7 @@ public class DAO {
     
     private static Manga map_manga( ResultSet resultSet ) throws SQLException {
          
-       Manga manga = new Manga(
+       Manga manga = new Manga(resultSet.getInt( "ID" ),
                                     resultSet.getString( "TITRE" ),
                                     resultSet.getString( "AUTEUR" ),
                                     resultSet.getString( "GENRE" ),
@@ -225,7 +224,7 @@ public class DAO {
     }     
     private static Comic map_comic( ResultSet resultSet ) throws SQLException {
          
-       Comic comic = new Comic(
+       Comic comic = new Comic(resultSet.getInt( "ID" ),
                                     resultSet.getString( "TITRE" ),
                                     resultSet.getString( "AUTEUR" ),
                                     resultSet.getString( "GENRE" ),

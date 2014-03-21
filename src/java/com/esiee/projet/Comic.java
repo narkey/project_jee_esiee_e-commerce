@@ -16,8 +16,8 @@ public class Comic extends Livre{
         super();
     }
 
-    public Comic(String titre, String auteur, String genre, String description, float prix) {
-        super(titre, auteur, genre, description, prix);
+    public Comic(int id, String titre, String auteur, String genre, String description, float prix) {
+        super(id, titre, auteur, genre, description, prix);
     }
     
 }
