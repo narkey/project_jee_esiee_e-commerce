@@ -14,7 +14,7 @@
     <body>
         <h1>Hello World!</h1>
         
-    <script src="bootstrap/js/jquery.min.js"></script> 
+    <script src="jquery/js/jquery-ui.min.js"></script> 
     <script src="bootstrap/js/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
     </body>
