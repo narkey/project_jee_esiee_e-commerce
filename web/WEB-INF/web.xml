@@ -19,6 +19,16 @@
         <url-pattern>/Inscription</url-pattern>
     </servlet-mapping>
     
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Achat</url-pattern>
+    </servlet-mapping>
+    
+   <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Catalogue</url-pattern>
+    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30

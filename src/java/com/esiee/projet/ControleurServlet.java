@@ -7,6 +7,7 @@
 package com.esiee.projet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -41,7 +42,9 @@ public class ControleurServlet extends HttpServlet {
     	
     	switch(request.getServletPath()) {
     	
-    	case "/Connexion" : this.getServletContext().getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
+    	case "/Connexion" : 
+            System.out.println("pouetbrvgftrbfgbfg0");    
+            this.getServletContext().getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
     		break;
     	
     	case "/Index" : this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
@@ -49,6 +52,14 @@ public class ControleurServlet extends HttpServlet {
     	
     	case "/Inscription" : this.getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
 		break;
+    	case "/Catalogue" : 
+            System.out.println("pouet0");
+            ArrayList<Livre> listBook= new ArrayList<Livre>();
+            listBook = dao.getAllBook();
+            System.out.println("pouet"+listBook.toString());
+            request.setAttribute("list_book", listBook);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp").forward(request, response);
+            break;            
     	}
     }
 
