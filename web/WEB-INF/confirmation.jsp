@@ -1,8 +1,3 @@
-<%-- 
-    Document   : confirmation
-    Created on : 20 mars 2014, 11:11:12
-    Author     : tithf
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -52,6 +47,10 @@
 	</tbody>
 	</table>                      
 
+         
+         <button type="submit" class="btn btn-primary" name="confirmer">confirmer</button>
+         <button type="submit" class="btn" name="annuler">annuler</button>
+                
         </div>
     <!-- Le javascript
 		================================================== -->
