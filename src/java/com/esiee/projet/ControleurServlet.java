@@ -7,30 +7,49 @@
 package com.esiee.projet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 
 /**
  *
  * @author tithf
  */
+
 public class ControleurServlet extends HttpServlet {
-    DAO dao;
+    
+	private DAO dao;
+	
+	/**
+	 * Methode permettant d'instancier les diff&eacute;rents DAO utilis&eacute;s par cette
+	 * servlet pour acceder &agrave; la base de donn&eacute;es
+	 * 
+	 * @see javax.servlet.GenericServlet#init()
+	 */
+	public void init() throws ServletException {
+		/* R�cup�ration d'une instance de notre DAO Utilisateur */
+		this.dao = new DAO("tutu", "tutu", "project_jee");
+	}
+	
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            
-        switch(request.getServletPath())
-        {
-            case "/Connexion" : this.getServletContext().getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
-                break;
-            case "/Inscription" : this.getServletContext().getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
-              break;
-        }
+    	
+    	switch(request.getServletPath()) {
+    	
+    	case "/Connexion" : this.getServletContext().getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
+    		break;
+    	
+    	case "/Index" : this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+			break;
+    	
+    	case "/Inscription" : this.getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
+		break;
+    	}
     }
 
 
@@ -41,22 +60,40 @@ public class ControleurServlet extends HttpServlet {
            {
                case "connect":    
                    
-                   String email = request.getParameter("email");
-                   String mdp = request.getParameter("mdp");
+                   /*String email = request.getParameter("email");
                    Utilisateur user = dao.getUtilisateur(email);
                    request.setAttribute( "user", user );
                    if(user!=null)
-                   {
-                       
-                        //this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
-                   }
+                        this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
                    else
-                   {
-                       response.setContentType("text/html");
-                       response.getWriter().println("Vous n'êtes pas enregistré, voulez-vous vous <a href='inscription.jsp'>inscrire</a> ?");                     
-                   }
-                   break;
+                       this.getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
+                   break;*/
 
+            	/* Preparation de l'objet formulaire */
+           		ConnexionForm form = new ConnexionForm( dao );
+           		
+           		/* Appel au traitement et a la validation de la requete, et recuperation du bean en resultant */
+           		Utilisateur user = form.connecterUtilisateur( request );
+
+           		/* Recuperation de la session depuis la requete */
+           		HttpSession session = request.getSession();
+           		
+           		/* Si aucune erreur de validation, alors ajout du bean Utilisateur a la session, sinon suppression du bean de la session */
+           		if (form.getErreurs().isEmpty()) {
+           			session.setAttribute( "utilisateur", user );
+           			response.sendRedirect( this.getServletContext().getContextPath() + "/index.jsp");
+           			
+           		} else {
+           			session.setAttribute( "sessionUtilisateur", null );
+           			
+           			/* Stockage du formulaire et du bean dans l'objet request */
+           			request.setAttribute( "form", form );
+           			request.setAttribute( "utilisateur", user );
+
+           			/* Reaffichage de la page de login */
+           			this.getServletContext().getRequestDispatcher( "/WEB-INF/connexion.jsp" ).forward( request, response );
+           		}
+           		break;
                case "register":
                     Utilisateur utilisateur = new Utilisateur(
                                     request.getParameter("nom"),
@@ -74,6 +111,4 @@ public class ControleurServlet extends HttpServlet {
                   break;
            }
     }
-
-
 }

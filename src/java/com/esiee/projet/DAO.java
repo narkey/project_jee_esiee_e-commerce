@@ -13,8 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import com.esiee.projet.Utilisateur;
 
 /**
  *
@@ -29,19 +29,31 @@ public class DAO {
     private static final String SQL_INSERT_LIVRE = 
      "INSERT INTO TUTU.LIVRES (ID, TITRE, AUTEUR, GENRE, DESCRIPTION, PRIX) "
      + "VALUES (?, ?, ?, ?, ?, ?)";
+    
     private static final String SQL_SELECT_PK = 
         "SELECT * FROM TUTU.UTILISATEURS  WHERE EMAIL = ?";
+    
     private static final String SQL_SELECT_ALLUSER = 
         "SELECT * FROM TUTU.UTILISATEURS";
     
+    /**
+	 * Sélectionne un utilisateur en fonction de son login.
+	 */
+	//private static final String SQL_SELECT_PAR_EMAIL = "SELECT * FROM Utilisateurs WHERE EMAIL = ?";
+	
+	
     public DAO(final String user, final String password, final String db){
         try {
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
+            Class.forName("org.apache.derby.jdbc.ClientDriver"); //Pour derby
+        	//Class.forName("com.mysql.jdbc.Driver"); //Pour MySQL
         } catch ( ClassNotFoundException e ) {
             System.out.println("Error driver");
         }
         try {
-            this.connection = DriverManager.getConnection("jdbc:derby://localhost:1527/" + db, user, password);
+            this.connection = DriverManager.getConnection("jdbc:derby://localhost:1527/" + db, user, password); //Pour derby
+        	
+        	//this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db, user, password); //Pour mysql
+        	
         } catch (SQLException sqle) {
             System.out.println("" + sqle);
         }
@@ -69,20 +81,19 @@ public class DAO {
      * Methode verifiant si l'utilisateur avec la clé primaire en paramètre est dans la table d'utilisateurs
      */
      
-    public Utilisateur getUtilisateur(final String primary_key) {
+    public Utilisateur getUtilisateur(final String email) {
         
-        boolean trouve= false;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Utilisateur utilisateur = null;
         
         try {
-            System.out.println(primary_key);
-        preparedStatement = initialisationRequetePreparee( this.connection, SQL_SELECT_PK, true, primary_key );
+            //System.out.println(primary_key);
+        preparedStatement = initialisationRequetePreparee( this.connection, SQL_SELECT_PK, true, email );
         resultSet = preparedStatement.executeQuery();
             
            
-        while(resultSet.next()) {
+        if(resultSet.next()) {
                     
             //L'utilisateur a été trouvé dans notre base"
             utilisateur = map_user( resultSet );
@@ -91,7 +102,7 @@ public class DAO {
         
         resultSet.close();
         } catch(SQLException sqle) {
-            System.out.println("" + sqle);
+            System.err.println("" + sqle);
         }
         
         return utilisateur;
@@ -125,6 +136,7 @@ public class DAO {
         return list;
         
      }
+     
     public static PreparedStatement initialisationRequetePreparee(Connection connexion, String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException 
     {
         PreparedStatement preparedStatement = connexion.prepareStatement( sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS );
