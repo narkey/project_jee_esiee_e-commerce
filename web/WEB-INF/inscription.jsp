@@ -80,13 +80,6 @@
 				</c:if>
 				</div>
             </div>
-            
-            <div class="form-group" >
-            	<label class="control-label col-sm-5" for="adresse">Adresse</label>
-            	<div class="col-sm-7">
-                    <input class="form-control" name="adresse" type="adresse" data-toggle="tooltip" data-placement="bottom" title="Veuillez saisir votre adresse" required="require"/>
-                </div>
-            </div>                
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <input type="hidden" name="origin" value="register"/>
             

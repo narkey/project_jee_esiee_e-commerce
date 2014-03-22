@@ -12,10 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- * filtre pour les gens pas connectés (inscription, livre)
- * @author Remi
- */
 public class ClientFilter implements Filter{
 
 	@Override

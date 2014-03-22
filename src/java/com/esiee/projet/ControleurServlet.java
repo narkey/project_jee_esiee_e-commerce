@@ -7,7 +7,6 @@
 package com.esiee.projet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,8 +31,8 @@ public class ControleurServlet extends HttpServlet {
 	 * @see javax.servlet.GenericServlet#init()
 	 */
 	public void init() throws ServletException {
-		/* Rï¿½cupï¿½ration d'une instance de notre DAO Utilisateur */
-		this.dao = new DAO("tutu", "tutu", "project_jee");
+		/* Récupération d'une instance de notre DAO Utilisateur */
+		this.dao = new DAO("root", "", "projet_jee");
 	}
 	
     @Override
@@ -42,8 +41,7 @@ public class ControleurServlet extends HttpServlet {
     	
     	switch(request.getServletPath()) {
     	
-    	case "/Connexion" : 
-            this.getServletContext().getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
+    	case "/Connexion" : this.getServletContext().getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
     		break;
     	
     	case "/Index" : this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
@@ -51,44 +49,24 @@ public class ControleurServlet extends HttpServlet {
     	
     	case "/Inscription" : this.getServletContext().getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
 		break;
-    	case "/Catalogue" : 
-            ArrayList<Livre> listBook= new ArrayList<Livre>();
-            System.out.println(request.getParameter("cat"));
-            String category;
-            if(request.getParameter("cat")==null)
-                category = "all";
-            else
-                category = request.getParameter("cat");
-            if(category.equals("manga")||category.equals("bd")||category.equals("comic"))
-                {
-                    listBook = dao.getCategoryBook(request.getParameter("cat"));
-                }
-            else
-            {
-                listBook = dao.getAllBook();
-            }
-            for(Livre object: listBook){
-              System.out.println(object.toString());
-            }
-            request.setAttribute("list_book", listBook);
-            this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp").forward(request, response);
-            break;
-       case "/Deconnexion" :
-            /* Recuperation et destruction de la session en cours */
-            HttpSession session = request.getSession();
-            session.invalidate();
-
-            /* Redirection vers la page de connexion */
-            response.sendRedirect( this.getServletContext().getContextPath() + "/Index");
-            break;
-       case "/Confirmation":
-           /* Recuperation de la session depuis la requete */
-            HttpSession session2 = request.getSession();
-            Utilisateur user = (Utilisateur)session2.getAttribute("sessionUtilisateur");
-            System.out.println("yoooo : "+ user.getNom());
-            request.setAttribute("user", user);
-            this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
-           break;
+		
+    	case "/Edition" : this.getServletContext().getRequestDispatcher("/WEB-INF/editprofil.jsp").forward(request, response);
+		break;
+		
+    	case "/Deconnexion" :
+    		
+    		/* Recuperation et destruction de la session en cours */
+    		HttpSession session = request.getSession();
+    		session.invalidate();
+    		
+    		/* Redirection vers la page de connexion */
+    		response.sendRedirect( this.getServletContext().getContextPath() + "/Index");
+    		break;
+    	
+    	case "/AjouterRef" : this.getServletContext().getRequestDispatcher("/WEB-INF/test.jsp").forward(request, response);
+			break;
+    	
+	
     	}
     }
 
@@ -98,43 +76,33 @@ public class ControleurServlet extends HttpServlet {
             throws ServletException, IOException {
            switch(request.getParameter("origin"))
            {
-               case "connect":      
-              	 
-               	/*String email = request.getParameter("email");
-               	Utilisateur user = dao.getUtilisateur(email);
-               	request.setAttribute( "user", user );
-               	if(user!=null)
-                    	this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
-               	else
-                   	this.getServletContext().getRequestDispatcher("/WEB-INF/register.jsp").forward(request, response);
-               	break;*/
+               case "connect":    
+                   
+                /* Preparation de l'objet formulaire */
+           		ConnexionForm form = new ConnexionForm( dao );
+           		
+           		/* Appel au traitement et a la validation de la requete, et recuperation du bean en resultant */
+           		Utilisateur user = form.connecterUtilisateur( request );
 
-       		 /* Preparation de l'objet formulaire */
-      			 ConnexionForm form = new ConnexionForm( dao );
-      			 
-      			 /* Appel au traitement et a la validation de la requete, et recuperation du bean en resultant */
-      			 Utilisateur user = form.connecterUtilisateur( request );
+           		/* Recuperation de la session depuis la requete */
+           		HttpSession session = request.getSession();
+           		
+           		/* Si aucune erreur de validation, alors ajout du bean Utilisateur a la session, sinon suppression du bean de la session */
+           		if (form.getErreurs().isEmpty()) {
+           			session.setAttribute( "sessionUtilisateur", user );
+           			response.sendRedirect( this.getServletContext().getContextPath() + "/index.jsp");
+           			
+           		} else {
+           			session.setAttribute( "sessionUtilisateur", null );
+           			
+           			/* Stockage du formulaire et du bean dans l'objet request */
+           			request.setAttribute( "form", form );
+           			request.setAttribute( "utilisateur", user );
 
-      			 /* Recuperation de la session depuis la requete */
-      			 HttpSession session = request.getSession();
-      			 
-      			 /* Si aucune erreur de validation, alors ajout du bean Utilisateur a la session, sinon suppression du bean de la session */
-      			 if (form.getErreurs().isEmpty()) {
-      				 session.setAttribute( "sessionUtilisateur", user );
-      				 response.sendRedirect( this.getServletContext().getContextPath() + "/index.jsp");
-      				 
-      			 } else {
-      				 session.setAttribute( "sessionUtilisateur", null );
-      				 
-      				 /* Stockage du formulaire et du bean dans l'objet request */
-      				 request.setAttribute( "form", form );
-      				 request.setAttribute( "utilisateur", user );
-
-      				 /* Reaffichage de la page de login */
-      				 this.getServletContext().getRequestDispatcher( "/WEB-INF/connexion.jsp" ).forward( request, response );
-      			 }
-      		 break;
-                         
+           			/* Reaffichage de la page de login */
+           			this.getServletContext().getRequestDispatcher( "/WEB-INF/connexion.jsp" ).forward( request, response );
+           		}
+           		break;
                case "register":
             	   /* Preparation de l'objet formulaire */
             	   InscriptionForm form_inscription = new InscriptionForm( dao );
@@ -151,7 +119,33 @@ public class ControleurServlet extends HttpServlet {
             	   else
             		   this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
                    break;
-                                      
+               case "edit_profil":
+            	   
+            	   /* Preparation de l'objet formulaire */
+              		EditProfilForm edit_form = new EditProfilForm( dao );
+              		
+              		/* Appel au traitement et a la validation de la requete, et recuperation du bean en resultant */
+              		Utilisateur user_edit = edit_form.modifierUtilisateur( request );
+
+              		/* Recuperation de la session depuis la requete */
+              		HttpSession session2 = request.getSession();
+              		
+              		/* Si aucune erreur de validation, alors ajout du bean Utilisateur a la session, sinon suppression du bean de la session */
+               		if (edit_form.getErreurs().isEmpty()) {
+               			session2.setAttribute( "sessionUtilisateur", null );
+               			session2.setAttribute( "sessionUtilisateur", user_edit );
+               			response.sendRedirect( this.getServletContext().getContextPath() + "/index.jsp");
+               		}
+               		else {
+               			/* Stockage du formulaire et du bean dans l'objet request */
+               			request.setAttribute( "form", edit_form );
+               			request.setAttribute( "utilisateur", user_edit );
+
+               			/* Reaffichage de la page d'édition */
+               			this.getServletContext().getRequestDispatcher( "/WEB-INF/editprofil.jsp" ).forward( request, response );
+               		}
+               		
+            	   break;
                    
                default:
                    this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);

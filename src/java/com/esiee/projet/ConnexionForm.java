@@ -30,11 +30,11 @@ public final class ConnexionForm extends Form{
 			
 		if ( erreurs.isEmpty() ) {
 			
-			// Rï¿½cuperation de l'utilisateur en fonction de son email
+			// Récuperation de l'utilisateur en fonction de son email
 			userSearch = dao.getUtilisateur( utilisateur.getEmail());
 			// Si la recherche retourne un resultat
 			if ( userSearch != null ) {
-				if (utilisateur.getMdp().equals(userSearch.getMdp())) {
+				if (MD5(utilisateur.getMdp()).equals(userSearch.getMdp())) {
 				  // correct!
 					/*if( userSearch.getIsActivated() == 1 ) {
 						resultat = "Connexion rÃ©ussie.";
