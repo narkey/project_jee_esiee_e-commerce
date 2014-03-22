@@ -55,24 +55,23 @@ public final class BookRegisterForm extends Form{
                             setErreur( CHAMP_TYPE , e.getMessage() );
                     }
 
-                    /*if(type.equals("Mangas")){
-                        Manga manga = new Manga(livre.getId(),titre,auteur,genre,description,Float.parseFloat(prix));
-                        return (Livre)manga;
+                    if(type.equals("Mangas")){
+                 
+                        dao.insert_Book(livre, "Manga");
+                     
                     }
                     
                     if(type.equals("Comics")){
-                       Bd bd = new Bd(livre.getId(),titre,auteur,genre,description,Float.parseFloat(prix));
-                       return (Livre)bd;
+                      dao.insert_Book(livre, "Comic");
                     }
                     
                     if(type.equals("BD")){
-                        Comic comic = new Comic(livre.getId(),titre,auteur,genre,description,Float.parseFloat(prix));
-                        return (Livre)comic;
-                    }*/
+                       dao.insert_Book(livre, "Bd");
+                    }
 
 		}
                 
-                return null;
+                return livre;
 	}
 
         
