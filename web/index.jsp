@@ -68,6 +68,12 @@
 </div>
         
         </div>
+        <div>
+        <a href="/project_jee/Catalogue?cat=bd">BD franco-belge</a><br/>
+        <a href="/project_jee/Catalogue?cat=comic">Comic am&eacute;ricain</a><br/>
+        <a href="/project_jee/Catalogue?cat=manga">Manga japonais</a><br/>
+        <a href="/project_jee/Catalogue">Tous</a><br/>
+        </div>
         <!-- Le javascript
 		================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

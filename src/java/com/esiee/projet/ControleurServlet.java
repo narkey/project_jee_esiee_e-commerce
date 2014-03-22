@@ -50,32 +50,30 @@ public class ControleurServlet extends HttpServlet {
     	
     	case "/Inscription" : this.getServletContext().getRequestDispatcher("/WEB-INF/inscription.jsp").forward(request, response);
 		break;
-		
-    	case "/Edition" : this.getServletContext().getRequestDispatcher("/WEB-INF/editprofil.jsp").forward(request, response);
-		break;
-		
-            case "/Catalogue" : 
+    	case "/Catalogue" : 
             ArrayList<Livre> listBook= new ArrayList<Livre>();
             System.out.println(request.getParameter("cat"));
-            String category = request.getParameter("cat");
+            String category;
+            if(request.getParameter("cat")==null)
+                category = "all";
+            else
+                category = request.getParameter("cat");
             if(category.equals("manga")||category.equals("bd")||category.equals("comic"))
                 {
                     listBook = dao.getCategoryBook(request.getParameter("cat"));
-                    System.out.println("ya une categorie");
                 }
-               
-            
             else
             {
                 listBook = dao.getAllBook();
-                System.out.println("ya pas une categorie");
             }
             for(Livre object: listBook){
               System.out.println(object.toString());
             }
             request.setAttribute("list_book", listBook);
             this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp").forward(request, response);
-            break;  
+            break;		
+    	case "/Edition" : this.getServletContext().getRequestDispatcher("/WEB-INF/editprofil.jsp").forward(request, response);
+		break;
 		
     	case "/Deconnexion" :
     		
@@ -89,6 +87,13 @@ public class ControleurServlet extends HttpServlet {
     	
     	case "/AjouterRef" : this.getServletContext().getRequestDispatcher("/WEB-INF/test.jsp").forward(request, response);
 			break;
+        case "/Confirmation"  :
+            /* Recuperation de la session depuis la requete */
+            HttpSession session2 = request.getSession();
+            Utilisateur user = (Utilisateur)session2.getAttribute( "sessionUtilisateur");
+            request.setAttribute( "utilisateur", user );
+            this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
+            break;
     	
 	
     	}
@@ -170,10 +175,6 @@ public class ControleurServlet extends HttpServlet {
                		}
                		
             	   break;
-				   
-                case "bookRegister":
-                    
-                    break;
                    
                default:
                    this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);

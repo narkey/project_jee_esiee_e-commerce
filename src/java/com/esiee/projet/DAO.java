@@ -24,7 +24,7 @@ public class DAO {
     private Connection connection;
     
     //Prepared request
-    /*private static final String SQL_INSERT_UTILISATEUR = 
+    private static final String SQL_INSERT_UTILISATEUR = 
     "INSERT INTO TUTU.UTILISATEURS (NOM, PRENOM, MDP, EMAIL, ADRESSE, ACCESS) "
         + "VALUES (?, ?, ?, ?, 'MON ADRESSE',5)";
     
@@ -47,9 +47,8 @@ public class DAO {
     	    
     private static final String SQL_SELECT_CATEGORY_BOOK = 
     	 "SELECT * FROM TUTU.LIVRES WHERE CATEGORIE = ?";
-    */
-    
-    private static final String SQL_INSERT_UTILISATEUR = 
+        
+    /*private static final String SQL_INSERT_UTILISATEUR = 
     "INSERT INTO UTILISATEURS (NOM, PRENOM, MDP, EMAIL, ADRESSE, ACCESS) "
         + "VALUES (?, ?, ?, ?, 'MON ADRESSE',5)";
     
@@ -72,7 +71,7 @@ public class DAO {
     	    
     private static final String SQL_SELECT_CATEGORY_BOOK = 
     	 "SELECT * FROM LIVRES WHERE CATEGORIE = ?";
-    
+    */
     
     /**
 	 * SÃ©lectionne un utilisateur en fonction de son login.
@@ -217,7 +216,7 @@ public class DAO {
            preparedStatement = initialisationRequetePreparee( this.connection, SQL_SELECT_ALLBOOK, true);
            resultSet = preparedStatement.executeQuery();
            while(resultSet.next()) {
-           //L'utilisateur a été trouvé dans notre base"
+           //L'utilisateur a ï¿½tï¿½ trouvï¿½ dans notre base"
            list.add(map_livre( resultSet ));            
        }
        
@@ -241,7 +240,7 @@ public class DAO {
 
            if(resultSet.next()) {
 
-               //L'utilisateur a été trouvé dans notre base"
+               //L'utilisateur a ï¿½tï¿½ trouvï¿½ dans notre base"
                list.add(map_livre( resultSet ));
 
            }

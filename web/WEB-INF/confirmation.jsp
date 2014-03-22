@@ -20,15 +20,17 @@
         <div class="container container-fluid">
     <h1>Confirmation de la demande</h1>
         <br/><br/><br/>
-        <legend>Nom de l'utilisateur : <c:out value="${user.nom}"/></legend>
-         
-        <legend>adresse : <c:out value="${user.adresse}"/></legend><br/><br/><br/>
-        
+         <%-- Vérification de la présence d'un objet utilisateur en session --%>
+   	 <c:if test="${ !empty sessionScope.sessionUtilisateur }">
+        <legend>Nom de l'utilisateur : <c:out value="${sessionScope.sessionUtilisateur.nom}"/></legend>
+         <legend>Nom de l'utilisateur : <c:out value="${user.nom}"/></legend>
+         <legend>adresse : <c:out value="${sessionScope.sessionUtilisateur.adresse}"/></legend>
+         <legend>Adresse : <c:out value="${user.adresse}"/></legend>
+         <br/><br/><br/>
+        </c:if>
+
     <legend>Liste d'achat</legend>     
-    
-    
-    
-    
+   
 	<table class="table table-striped">
     	<thead><tr>
 	    <th>Titre</th>
@@ -36,15 +38,7 @@
 	</tr></thead>
         
 	<tbody>
-	<!--<c:forEach items="${list_pb}" var="pb">
-		<tr ${(pb.solved == true) ? 'class="success"' : 'class="danger"'}>
-		  <td><c:out value="${pb.pseudo}" /></td>
-		  <td><c:out value="${pb.op_sys}" /></td>
-		  <td><c:out value="${pb.software}" /></td>
-		  <td><c:out value="${pb.probleme}" /></td>
-		  <td><c:out value="${pb.solved ==true ? 'Oui' : 'Non'} "/></td>
-		</tr>
-	</c:forEach>-->
+
 	</tbody>
 	</table>                      
 
