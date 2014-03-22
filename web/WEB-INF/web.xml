@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <display-name>project_jee</display-name>
     <servlet>
         <servlet-name>ControleurServlet</servlet-name>
         <servlet-class>com.esiee.projet.ControleurServlet</servlet-class>
@@ -101,7 +102,28 @@
     <servlet-mapping>
         <servlet-name>ControleurServlet</servlet-name>
         <url-pattern>/ControleurServlet</url-pattern>
-    </servlet-mapping>    
+    </servlet-mapping>
+    <filter>
+   	 <filter-name>ClientFilter</filter-name>
+   	 <filter-class>com.esiee.projet.ClientFilter</filter-class>
+    </filter>
+    <filter-mapping>
+   	 <filter-name>ClientFilter</filter-name>
+   	 <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+   	 <filter-name>AdminFilter</filter-name>
+   	 <filter-class>com.esiee.projet.AdminFilter</filter-class>
+    </filter>
+    <filter-mapping>
+   	 <filter-name>AdminFilter</filter-name>
+   	 <url-pattern>/Recap</url-pattern>
+   	 <url-pattern>/AjouterRef</url-pattern>
+   	 <url-pattern>/ModifierRef</url-pattern>
+   	 <url-pattern>/SupprimerRef</url-pattern>
+    </filter-mapping>
+
+        
     <session-config>
         <session-timeout>
             30
