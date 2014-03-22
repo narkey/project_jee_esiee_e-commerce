@@ -112,7 +112,7 @@ public final class BookRegisterForm extends Form{
 			setErreur( CHAMP_GENRE, e.getMessage() );
 		}
 		
-		livre.setTitre( genre );
+		livre.setGenre( genre );
 	}
         
          private void traiterDescription( String description, Livre livre) {
@@ -124,7 +124,7 @@ public final class BookRegisterForm extends Form{
 			setErreur( CHAMP_DESCRIPTION, e.getMessage() );
 		}
 		
-		livre.setTitre( description );
+		livre.setDescription( description );
 	}
       
         private void traiterPrix( String prix, Livre livre) {
@@ -136,7 +136,7 @@ public final class BookRegisterForm extends Form{
 			setErreur( CHAMP_PRIX , e.getMessage() );
 		}
 		
-		livre.setTitre( prix );
+		livre.setPrix( Float.parseFloat(prix));
 	}
        
 	
