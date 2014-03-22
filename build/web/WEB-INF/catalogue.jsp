@@ -12,6 +12,7 @@
         <title>Liste des articles disponibles</title>
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+	<c:import url="../header.jsp"></c:import>    
     </head>
     <body>
         <div class="container container-fluid">

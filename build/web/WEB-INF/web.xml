@@ -28,6 +28,10 @@
         <servlet-name>ControleurServlet</servlet-name>
         <url-pattern>/Catalogue</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Confirmation</url-pattern>
+    </servlet-mapping>
     
     <session-config>
         <session-timeout>
