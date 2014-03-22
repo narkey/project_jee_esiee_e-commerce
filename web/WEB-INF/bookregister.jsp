@@ -5,45 +5,107 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Enregistrement du client</title>
-         <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-<c:import url="../header.jsp"></c:import>    
+        <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+                
     </head>
     <body>
         <div class="container container-fluid">
-        <h1>Enregistrement du livre</h1>
+        <h1>Enregistrement d'un livre</h1>
         
         
         
-        <legend>Informations requises :</legend>
-        <br/>
+        <legend>Ajouter un livre</legend>
+        
         <form class="form-horizontal" role="form" method="post" action="ControleurServlet">
-            <div class="form-group"><label for="titre">Titre : </label><input placeholder="Entrez le titre du livre" class="form-control" type="text" name="titre" required="required"/></div>
-            <div class="form-group"><label for="auteur">Auteur : </label><input placeholder="Entrez le nom de l'auteur" class="form-control" type="text" name="auteur" required="required"/></div>
-            <div class="form-group"><label for="genre">Genre : </label><input placeholder="Entrez le genre du livre" class="form-control" type="text" name="genre" required="required"/></div>
-            <div class="form-group"><label for="description">Description : </label><textarea class="form-control" name="description"  rows="5" cols="25"/>Entrez la description du livre</textarea></div>
-            <div class="form-group"><label for="prix">Prix : </label><input placeholder="Entrez le prix du livre" class="form-control" type="text" name="prix" required="required"/></div>
-            <div class="form-group"><label for="type">Type du livre : </label><select class="form-control" type="text" name="type"/><option>Manga</option><option>Comic</option><option>Bande Dessinée</option></select></div>
+            <div class="form-group <c:if test="${!empty form.resultat}">${empty form.erreurs['titre'] ? 'has-success has-feedback': 'has-error has-feedback'}</c:if>">
+                <label class="control-label col-sm-2" for="titre" >Titre</label>
+                <div class="col-sm-10">
+                <input placeholder="Entrez le titre du livre" class="form-control" type="text" name="titre" required="required"/>
+                <c:if test="${!empty form.resultat}">
+			<span class="glyphicon glyphicon-${empty form.erreurs['titre'] ? 'ok': 'remove'} form-control-feedback"></span>
+			<p class="text-danger">${empty form.erreurs['titre'] ? '' : form.erreurs['titre']}</p>
+		</c:if>
+		</div>
+            </div>
+            
+            <div class="form-group form-group <c:if test="${!empty form.resultat}">${empty form.erreurs['auteur'] ? 'has-success has-feedback': 'has-error has-feedback'}</c:if>">
+                <label class="control-label col-sm-2" for="auteur">Auteur</label>
+                <div class="col-sm-10">
+                <input placeholder="Entrez le nom de l'auteur" class="form-control" type="text" name="auteur" required="required"/>
+                <c:if test="${!empty form.resultat}">
+			<span class="glyphicon glyphicon-${empty form.erreurs['auteur'] ? 'ok': 'remove'} form-control-feedback"></span>
+			<p class="text-danger">${empty form.erreurs['auteur'] ? '' : form.erreurs['auteur']}</p>
+		</c:if>
+		</div>
+            </div>
+            
+            
+            <div class="form-group form-group <c:if test="${!empty form.resultat}">${empty form.erreurs['genre'] ? 'has-success has-feedback': 'has-error has-feedback'}</c:if>">
+                <label class="control-label col-sm-2" for="genre">Genre</label>
+                <div class="col-sm-10">
+                <input placeholder="Entrez le genre du livre" class="form-control" type="text" name="genre" required="required"/>
+                <c:if test="${!empty form.resultat}">
+			<span class="glyphicon glyphicon-${empty form.erreurs['genre'] ? 'ok': 'remove'} form-control-feedback"></span>
+			<p class="text-danger">${empty form.erreurs['genre'] ? '' : form.erreurs['genre']}</p>
+		</c:if>
+		</div>
+            </div>
+            
+            <div class="form-group form-group <c:if test="${!empty form.resultat}">${empty form.erreurs['description'] ? 'has-success has-feedback': 'has-error has-feedback'}</c:if>">
+                <label class="control-label col-sm-2" for="description">Description</label>
+                <div class="col-sm-10">
+                <textarea class="form-control" name="description"  placeholder="Entrez la description du livre" rows="5" cols="25"/></textarea>
+                <c:if test="${!empty form.resultat}">
+			<span class="glyphicon glyphicon-${empty form.erreurs['description'] ? 'ok': 'remove'} form-control-feedback"></span>
+			<p class="text-danger">${empty form.erreurs['description'] ? '' : form.erreurs['description']}</p>
+		</c:if>
+		</div>
+            </div>
+            
+            <div class="form-group form-group <c:if test="${!empty form.resultat}">${empty form.erreurs['prix'] ? 'has-success has-feedback': 'has-error has-feedback'}</c:if>">
+                <label class="control-label col-sm-2" for="prix">Prix</label>
+                <div class="col-sm-10">
+                <input placeholder="Entrez le prix du livre" class="form-control" type="text" name="prix" required="required"/>
+                <c:if test="${!empty form.resultat}">
+			<span class="glyphicon glyphicon-${empty form.erreurs['prix'] ? 'ok': 'remove'} form-control-feedback"></span>
+			<p class="text-danger">${empty form.erreurs['prix'] ? '' : form.erreurs['prix']}</p>
+		</c:if>
+		</div>
+            </div>
+            <div class="form-group form-group <c:if test="${!empty form.resultat}">${empty form.erreurs['type'] ? 'has-success has-feedback': 'has-error has-feedback'}</c:if>">
+                <label class="control-label col-sm-2" for="type">Type du livre</label>
+                <div class="col-sm-10">
+                <select class="form-control" type="text" name="type"/>
+                    <option value="Mangas">Mangas</option>
+                    <option value="Comics">Comics</option>
+                    <option value="BD">Bande Dessinée</option>
+                </select>
+                <c:if test="${!empty form.resultat}">
+			<span class="glyphicon glyphicon-${empty form.erreurs['type'] ? 'ok': 'remove'} form-control-feedback"></span>
+			<p class="text-danger">${empty form.erreurs['type'] ? '' : form.erreurs['type']}</p>
+		</c:if>
+		</div>
+            </div>
+            
+            
             <input type="hidden" name="origin" value="bookRegister"/>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-book"></span>&nbsp;&nbsp;Ajouter</button>
+            <button type="reset" class="btn btn-default"><span class="glyphicon glyphicon-remove-sign"></span>&nbsp;&nbsp;Annuler</button>
         </form>
         
         </div>
 
-         <!-- Le javascript
+        <!-- Le javascript
 		================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     </body>
 </html>
