@@ -148,6 +148,28 @@ public class ControleurServlet extends HttpServlet {
             	   else
             		   this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
                    break;
+                   
+                
+               case "bookRegister":
+                
+                   BookRegisterForm form_book = new BookRegisterForm(dao);
+                   
+                   Livre livre = form_book.enregistrerBook(request );
+
+            	   /* Stockage du formulaire et du bean dans l'objet request */
+            	   request.setAttribute( "form", form_book );
+            	   request.setAttribute( "livre", livre );
+                   
+            	   if(!form_book.getErreurs().isEmpty())
+            		   /* Affichage de la page d'inscription */
+            		   this.getServletContext().getRequestDispatcher( "/WEB-INF/bookregister.jsp" ).forward( request, response );
+            	   else
+            		   this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
+                   break;
+                   
+                    
+
+                   
                case "edit_profil":
             	   
             	   /* Preparation de l'objet formulaire */
