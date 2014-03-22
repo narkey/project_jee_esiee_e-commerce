@@ -33,8 +33,8 @@ public class DAO {
     	+ "WHERE EMAIL = ?";
     
     private static final String SQL_INSERT_LIVRE = 
-     "INSERT INTO TUTU.LIVRES (ID, TITRE, AUTEUR, GENRE, DESCRIPTION, PRIX) "
-     + "VALUES (?, ?, ?, ?, ?, ?)";
+     "INSERT INTO TUTU.LIVRES (ID, TITRE, AUTEUR, GENRE, DESCRIPTION, PRIX, CATEGORIE) "
+     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
     
     private static final String SQL_SELECT_PK = 
         "SELECT * FROM TUTU.UTILISATEURS  WHERE EMAIL = ?";
@@ -122,6 +122,28 @@ public class DAO {
          
          return ok;
     }
+    
+       public boolean insert_Book (final Livre livre, String categorie)
+    {
+    	boolean ok = false;
+        PreparedStatement preparedStatement = null;
+         try {
+
+            preparedStatement = initialisationRequetePreparee( this.connection, SQL_INSERT_LIVRE, true, livre.getId(), livre.getTitre(), livre.getAuteur(),livre.getGenre(),livre.getDescription(),livre.getPrix(),categorie);
+            int statut = preparedStatement.executeUpdate();
+
+            /* Analyse du statut retourné par la requête d'insertion */
+            if ( statut == 0 ) {
+              System.out.println( "Echec de l'enregistrement, aucune ligne ajoutee dans la table." );
+            }
+            else
+            	ok = true;
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
+         
+         return ok;
+    } 
     
     /**
      * M$eacute;thode permettant de modifier un utilisateur dans la bdd
