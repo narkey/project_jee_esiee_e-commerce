@@ -32,7 +32,7 @@ public class ControleurServlet extends HttpServlet {
 	 */
 	public void init() throws ServletException {
 		/* Récupération d'une instance de notre DAO Utilisateur */
-		this.dao = new DAO("root", "", "projet_jee");
+		this.dao = new DAO("tutu", "tutu", "project_jee");
 	}
 	
     @Override
@@ -52,6 +52,29 @@ public class ControleurServlet extends HttpServlet {
 		
     	case "/Edition" : this.getServletContext().getRequestDispatcher("/WEB-INF/editprofil.jsp").forward(request, response);
 		break;
+		
+		case "/Catalogue" : 
+            ArrayList<Livre> listBook= new ArrayList<Livre>();
+            System.out.println(request.getParameter("cat"));
+            String category = request.getParameter("cat");
+            if(category.equals("manga")||category.equals("bd")||category.equals("comic"))
+                {
+                    listBook = dao.getCategoryBook(request.getParameter("cat"));
+                    System.out.println("ya une categorie");
+                }
+               
+            
+            else
+            {
+                listBook = dao.getAllBook();
+                System.out.println("ya pas une categorie");
+            }
+            for(Livre object: listBook){
+              System.out.println(object.toString());
+            }
+            request.setAttribute("list_book", listBook);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp").forward(request, response);
+            break;  
 		
     	case "/Deconnexion" :
     		
@@ -146,6 +169,10 @@ public class ControleurServlet extends HttpServlet {
                		}
                		
             	   break;
+				   
+				     case "bookRegister":
+                    
+                    break;
                    
                default:
                    this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);

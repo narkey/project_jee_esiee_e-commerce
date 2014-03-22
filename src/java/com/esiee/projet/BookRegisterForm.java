@@ -55,7 +55,7 @@ public final class BookRegisterForm extends Form{
                             setErreur( CHAMP_TYPE , e.getMessage() );
                     }
 
-                    if(type.equals("Mangas")){
+                    /*if(type.equals("Mangas")){
                         Manga manga = new Manga(livre.getId(),titre,auteur,genre,description,Float.parseFloat(prix));
                         return (Livre)manga;
                     }
@@ -68,7 +68,7 @@ public final class BookRegisterForm extends Form{
                     if(type.equals("BD")){
                         Comic comic = new Comic(livre.getId(),titre,auteur,genre,description,Float.parseFloat(prix));
                         return (Livre)comic;
-                    }
+                    }*/
 
 		}
                 
