@@ -7,6 +7,7 @@
 package com.esiee.projet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,7 +32,7 @@ public class ControleurServlet extends HttpServlet {
 	 * @see javax.servlet.GenericServlet#init()
 	 */
 	public void init() throws ServletException {
-		/* Récupération d'une instance de notre DAO Utilisateur */
+		/* Rï¿½cupï¿½ration d'une instance de notre DAO Utilisateur */
 		this.dao = new DAO("tutu", "tutu", "project_jee");
 	}
 	
@@ -53,7 +54,7 @@ public class ControleurServlet extends HttpServlet {
     	case "/Edition" : this.getServletContext().getRequestDispatcher("/WEB-INF/editprofil.jsp").forward(request, response);
 		break;
 		
-		case "/Catalogue" : 
+            case "/Catalogue" : 
             ArrayList<Livre> listBook= new ArrayList<Livre>();
             System.out.println(request.getParameter("cat"));
             String category = request.getParameter("cat");
@@ -164,13 +165,13 @@ public class ControleurServlet extends HttpServlet {
                			request.setAttribute( "form", edit_form );
                			request.setAttribute( "utilisateur", user_edit );
 
-               			/* Reaffichage de la page d'édition */
+               			/* Reaffichage de la page d'ï¿½dition */
                			this.getServletContext().getRequestDispatcher( "/WEB-INF/editprofil.jsp" ).forward( request, response );
                		}
                		
             	   break;
 				   
-				     case "bookRegister":
+                case "bookRegister":
                     
                     break;
                    
