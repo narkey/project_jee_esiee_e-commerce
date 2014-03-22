@@ -24,8 +24,8 @@ public class DAO {
     private Connection connection;
     //Prepared request
     private static final String SQL_INSERT_UTILISATEUR = 
-    "INSERT INTO TUTU.UTILISATEURS (NOM, PRENOM, MDP, EMAIL, ADRESSE) "
-        + "VALUES (?, ?, ?, ?, ?)";
+    "INSERT INTO TUTU.UTILISATEURS (NOM, PRENOM, MDP, EMAIL, ADRESSE, ACCES) "
+        + "VALUES (?, ?, ?, ?, ?, 5)";
     private static final String SQL_INSERT_LIVRE = 
      "INSERT INTO TUTU.LIVRES (ID, TITRE, AUTEUR, GENRE, DESCRIPTION, PRIX) "
      + "VALUES (?, ?, ?, ?, ?, ?)";
@@ -67,11 +67,11 @@ public class DAO {
     /**
      * Méthode permettant de rajouter un utilisateur dans la bdd
      */
-    public void insert_user(final Utilisateur user)
+    public boolean insert_user(final Utilisateur user)
     {
         PreparedStatement preparedStatement = null;
+        boolean ok = false;
          try {
-
             preparedStatement = initialisationRequetePreparee( this.connection, SQL_INSERT_UTILISATEUR, true, user.getNom(), user.getPrenom(), user.getMdp(),user.getEmail(), user.getAdresse());
             int statut = preparedStatement.executeUpdate();
 
@@ -79,9 +79,12 @@ public class DAO {
             if ( statut == 0 ) {
               System.out.println( "Échec de l'enregistrement, aucune ligne ajoutée dans la table." );
             }
+            else
+                ok = true;
         } catch ( SQLException e ) {
             e.printStackTrace();
         }
+         return ok; 
     }
     /**
      * Methode verifiant si l'utilisateur avec la clé primaire en paramètre est dans la table d'utilisateurs
@@ -210,6 +213,7 @@ public class DAO {
                                     resultSet.getString( "MDP" ),
                                     resultSet.getString( "EMAIL" ),
                                     resultSet.getString("ADRESSE" ));
+        user.setAccess(resultSet.getInt("ACCES"));
         return user;
     }
     private static Livre map_livre( ResultSet resultSet ) throws SQLException {
