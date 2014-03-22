@@ -11,7 +11,8 @@
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-    
+<c:import url="../header.jsp"></c:import>    
+</head>
     
     
     
@@ -19,10 +20,15 @@
         <div class="container container-fluid">
     <h1>Confirmation de la demande</h1>
         <br/><br/><br/>
-        <legend>Nom de l'utilisateur : <c:out value="${user.nom}"/></legend>
-         
-        <legend>adresse : <c:out value="${user.adresse}"/></legend><br/><br/><br/>
-        
+         <%-- Vérification de la présence d'un objet utilisateur en session --%>
+   	 <c:if test="${ !empty sessionScope.sessionUtilisateur }">
+        <legend>Nom de l'utilisateur : <c:out value="${sessionScope.sessionUtilisateur.nom}"/></legend>
+         <legend>Nom de l'utilisateur : <c:out value="${user.nom}"/></legend>
+         <legend>adresse : <c:out value="${sessionScope.sessionUtilisateur.adresse}"/></legend>
+         <legend>Adresse : <c:out value="${user.adresse}"/></legend>
+         <br/><br/><br/>
+        </c:if>
+
     <legend>Liste d'achat</legend>     
     
     

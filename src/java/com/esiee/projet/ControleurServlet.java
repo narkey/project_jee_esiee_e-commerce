@@ -81,7 +81,14 @@ public class ControleurServlet extends HttpServlet {
             /* Redirection vers la page de connexion */
             response.sendRedirect( this.getServletContext().getContextPath() + "/Index");
             break;
-
+       case "/Confirmation":
+           /* Recuperation de la session depuis la requete */
+            HttpSession session2 = request.getSession();
+            Utilisateur user = (Utilisateur)session2.getAttribute("sessionUtilisateur");
+            System.out.println("yoooo : "+ user.getNom());
+            request.setAttribute("user", user);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
+           break;
     	}
     }
 
