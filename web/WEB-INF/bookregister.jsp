@@ -16,6 +16,7 @@
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+<c:import url="../header.jsp"></c:import>    
     </head>
     <body>
         <div class="container container-fluid">

@@ -10,63 +10,53 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>jQuery UI Spinner - Default functionality</title>
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-
-
-<script language="javascript">
-var valeur=0; //nb article
-var valeur2=0; //prix
-
-
-function modifier(increment,prix) {
-   
-        valeur+=increment;
-        valeur2+=prix;
-      if(valeur>=0&&valeur2>=0){   
-        document.getElementById('nb').value=valeur;
-        document.getElementById('prix').value=valeur2;
-    }else
-    {
-        valeur=0;
-        valeur2=0;
-    }
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.9.1.js"></script>
+<script src="/resources/demos/external/jquery.mousewheel.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+<c:import url="../header.jsp"></c:import>    
+<script>
+$(function() {
+var spinner = $( "#spinner" ).spinner();
+$( "#disable" ).click(function() {
+if ( spinner.spinner( "option", "disabled" ) ) {
+spinner.spinner( "enable" );
+} else {
+spinner.spinner( "disable" );
 }
-
+});
+$( "#destroy" ).click(function() {
+if ( spinner.data( "ui-spinner" ) ) {
+spinner.spinner( "destroy" );
+} else {
+spinner.spinner();
+}
+});
+$( "#getvalue" ).click(function() {
+alert( spinner.spinner( "value" ) );
+});
+$( "#setvalue" ).click(function() {
+spinner.spinner( "value", 5 );
+});
+$( "button" ).button();
+});
 </script>
-
 </head>
 <body>
-    
-    <form class="form-inline">
-    <div class="container container-fluid">
-    <legend for="text">Nombre d'article :</legend>
-    <input class="form-control" type="text" id="nb" name="value">
-    
-    <input class="btn btn-info" type="button" value="+" onClick="modifier(1,50)">
-    <input class="btn btn-danger" type="button" value="-" onClick="modifier(-1,-50)">
+<p>
+<label for="spinner">Select a value:</label>
+<input id="spinner" name="value">
+</p>
+<p>
+<button id="disable">Toggle disable/enable</button>
+<button id="destroy">Toggle widget</button>
+</p>
+<p>
+<button id="getvalue">Get value</button>
+<button id="setvalue">Set value to 5</button>
+</p>
       
-    <button type="submit" class="btn btn-warning">Voir mon panier</button>
-    
-    </br></br>
-    
-    <legend for="text">Prix total :</legend>
-    <input class="form-control" type="text" id="prix" name="value2">
-    
-    <script language="javascript">
-    document.getElementById('text').value=valeur;
-    
-    
-    document.getElementById('text').value=total;
-    </script>
-    </br></br></br>   
-    <button type="submit" class="  btn btn-success btn-lg"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;&nbsp;Acheter</button>
-    
-    </form>
-    
-    
     <script src="jquery/css/start/images/jquery-ui.min.js"></script>    
     <script src="jquery/js/jquery-ui.min.js"></script> 
     <script src="bootstrap/js/jquery.min.js"></script>
