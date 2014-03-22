@@ -119,7 +119,7 @@ public class InscriptionForm extends Form {
 				throw new FormValidationException( "Merci de saisir une adresse mail valide." );
 			}
 			else if ( dao.getUtilisateur( email ) != null ) {
-				throw new FormValidationException( "Cette adresse email est d&eacutej&agrave;  utilis&eacute;e, merci d'en choisir une autre." );
+				throw new FormValidationException( "Cette adresse email est d&eacutej&agrave;a utilis&eacute;e, merci d'en choisir une autre." );
 			}
 		} 
 		else {

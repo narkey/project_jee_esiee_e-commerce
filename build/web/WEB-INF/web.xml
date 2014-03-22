@@ -4,21 +4,23 @@
         <servlet-name>ControleurServlet</servlet-name>
         <servlet-class>com.esiee.projet.ControleurServlet</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>ControleurServlet</servlet-name>
-        <url-pattern>/ControleurServlet</url-pattern>
-    </servlet-mapping>
-    
+   
     <servlet-mapping>
         <servlet-name>ControleurServlet</servlet-name>
         <url-pattern>/Connexion</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Confirmation</url-pattern>
+    </servlet-mapping>    
     <servlet-mapping>
         <servlet-name>ControleurServlet</servlet-name>
         <url-pattern>/Inscription</url-pattern>
     </servlet-mapping>
-    
+     <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Index</url-pattern>
+    </servlet-mapping>   
     <servlet-mapping>
         <servlet-name>ControleurServlet</servlet-name>
         <url-pattern>/Achat</url-pattern>
@@ -30,9 +32,76 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ControleurServlet</servlet-name>
-        <url-pattern>/Confirmation</url-pattern>
+        <url-pattern>/Deconnexion</url-pattern>
     </servlet-mapping>
-    
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/ChangeMDP</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Reinitialiser</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Edition</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/LastCommands</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Commands</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/VoirPanier</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/ViderPanier</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/PasserCommande</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Categories</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/BD</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Comics</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Mangas</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/AjouterRef</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/SupprimerRef</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/ModifierRef</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/Recap</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleurServlet</servlet-name>
+        <url-pattern>/ControleurServlet</url-pattern>
+    </servlet-mapping>    
     <session-config>
         <session-timeout>
             30

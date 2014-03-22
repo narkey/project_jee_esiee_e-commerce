@@ -25,7 +25,7 @@ public class DAO {
     
     //Prepared request
     private static final String SQL_INSERT_UTILISATEUR = 
-    "INSERT INTO TUTU.UTILISATEURS (NOM, PRENOM, MDP, EMAIL, ADRESSE, ACCESS) "
+    "INSERT INTO TUTU.UTILISATEURS (NOM, PRENOM, MDP, EMAIL, ADRESSE, ACCES) "
         + "VALUES (?, ?, ?, ?, 'MON ADRESSE',5)";
     
     private static final String SQL_UPDATE_UTILISATEUR = 
@@ -83,15 +83,15 @@ public class DAO {
 	
     public DAO(final String user, final String password, final String db){
         try {
-            //Class.forName("org.apache.derby.jdbc.ClientDriver"); //Pour derby
-        	Class.forName("com.mysql.jdbc.Driver"); //Pour MySQL
+            Class.forName("org.apache.derby.jdbc.ClientDriver"); //Pour derby
+        	//Class.forName("com.mysql.jdbc.Driver"); //Pour MySQL
         } catch ( ClassNotFoundException e ) {
             System.out.println("Error driver");
         }
         try {
-            //this.connection = DriverManager.getConnection("jdbc:derby://localhost:1527/" + db, user, password); //Pour derby
+            this.connection = DriverManager.getConnection("jdbc:derby://localhost:1527/" + db, user, password); //Pour derby
         	
-        	this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db, user, password); //Pour mysql
+        	//this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + db, user, password); //Pour mysql
         	
         } catch (SQLException sqle) {
             System.out.println("" + sqle);
@@ -275,7 +275,7 @@ public class DAO {
                                     resultSet.getString( "MDP" ),
                                     resultSet.getString( "EMAIL" ),
                                     resultSet.getString( "ADRESSE" ),
-                                    resultSet.getInt("ACCESS" )
+                                    resultSet.getInt("ACCES" )
         						);
         return user;
     }

@@ -1,6 +1,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,17 +23,14 @@
          <%-- Vérification de la présence d'un objet utilisateur en session --%>
    	 <c:if test="${ !empty sessionScope.sessionUtilisateur }">
         <legend>Nom de l'utilisateur : <c:out value="${sessionScope.sessionUtilisateur.nom}"/></legend>
-         <legend>Nom de l'utilisateur : <c:out value="${user.nom}"/></legend>
+         <!--<legend>Nom de l'utilisateur : <c:out value="${user.nom}"/></legend>-->
          <legend>adresse : <c:out value="${sessionScope.sessionUtilisateur.adresse}"/></legend>
-         <legend>Adresse : <c:out value="${user.adresse}"/></legend>
+         <!--<legend>Adresse : <c:out value="${user.adresse}"/></legend>-->
          <br/><br/><br/>
         </c:if>
 
     <legend>Liste d'achat</legend>     
-    
-    
-    
-    
+   
 	<table class="table table-striped">
     	<thead><tr>
 	    <th>Titre</th>
@@ -41,15 +38,7 @@
 	</tr></thead>
         
 	<tbody>
-	<!--<c:forEach items="${list_pb}" var="pb">
-		<tr ${(pb.solved == true) ? 'class="success"' : 'class="danger"'}>
-		  <td><c:out value="${pb.pseudo}" /></td>
-		  <td><c:out value="${pb.op_sys}" /></td>
-		  <td><c:out value="${pb.software}" /></td>
-		  <td><c:out value="${pb.probleme}" /></td>
-		  <td><c:out value="${pb.solved ==true ? 'Oui' : 'Non'} "/></td>
-		</tr>
-	</c:forEach>-->
+
 	</tbody>
 	</table>                      
 
@@ -58,11 +47,10 @@
          <button type="submit" class="btn" name="annuler">annuler</button>
                 
         </div>
-    <!-- Le javascript
+        <!-- Le javascript
 		================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     </body>
 </html>

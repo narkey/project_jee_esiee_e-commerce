@@ -89,9 +89,9 @@ public class ControleurServlet extends HttpServlet {
 			break;
         case "/Confirmation"  :
             /* Recuperation de la session depuis la requete */
-            HttpSession session2 = request.getSession();
+            /*HttpSession session2 = request.getSession();
             Utilisateur user = (Utilisateur)session2.getAttribute( "sessionUtilisateur");
-            request.setAttribute( "utilisateur", user );
+            request.setAttribute( "user", user );*/
             this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
             break;
     	
