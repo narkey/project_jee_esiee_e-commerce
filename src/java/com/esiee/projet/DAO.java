@@ -47,7 +47,9 @@ public class DAO {
     	    
     private static final String SQL_SELECT_CATEGORY_BOOK = 
     	 "SELECT * FROM TUTU.LIVRES WHERE CATEGORIE = ?";
-        
+    
+    private static final String SQL_SELECT_CART = 
+        "SELECT * FROM TUTU.COMMANDES INNER JOIN TUTU.LISTE_COMMANDES ON TUTU.COMMANDES.ID = TUTU.LISTE_COMMANDES.ID_COMMANDE INNER JOIN TUTU.LIVRES ON TUTU.LISTE_COMMANDES.ID_PRODUIT = TUTU.LIVRES.ID WHERE TUTU.COMMANDES.EMAIL = ?";
     /*private static final String SQL_INSERT_UTILISATEUR = 
     "INSERT INTO UTILISATEURS (NOM, PRENOM, MDP, EMAIL, ADRESSE, ACCESS) "
         + "VALUES (?, ?, ?, ?, 'MON ADRESSE',5)";
@@ -273,8 +275,32 @@ public class DAO {
            }
 
        return list;
-       
     }
+    
+    public ArrayList<Livre> getChartBook(String user_email)
+    {
+       PreparedStatement preparedStatement = null;
+       ResultSet resultSet = null;
+       ArrayList<Livre> list = new ArrayList<Livre>();
+       
+       try {
+           preparedStatement = initialisationRequetePreparee( this.connection, SQL_SELECT_CART, true, user_email);
+           resultSet = preparedStatement.executeQuery();
+
+           if(resultSet.next()) {
+
+               //L'utilisateur a ete trouve dans notre base"
+               list.add(map_livre( resultSet ));
+
+           }
+
+           resultSet.close();
+           } catch(SQLException sqle) {
+               System.err.println("" + sqle);
+           }
+
+       return list;
+    }    
     public static PreparedStatement initialisationRequetePreparee(Connection connexion, String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException 
     {
         PreparedStatement preparedStatement = connexion.prepareStatement( sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS );
@@ -317,7 +343,7 @@ public class DAO {
     private static Livre map_livre( ResultSet resultSet ) throws SQLException {
          
         Livre livre = new Livre(
-        							resultSet.getInt("ID"),
+                                    resultSet.getInt("ID"),
                                     resultSet.getString( "TITRE" ),
                                     resultSet.getString( "AUTEUR" ),
                                     resultSet.getString( "GENRE" ),

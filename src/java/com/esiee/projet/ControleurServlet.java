@@ -32,7 +32,7 @@ public class ControleurServlet extends HttpServlet {
 	 * @see javax.servlet.GenericServlet#init()
 	 */
 	public void init() throws ServletException {
-		/* R�cup�ration d'une instance de notre DAO Utilisateur */
+		/* Recuperation d'une instance de notre DAO Utilisateur */
 		this.dao = new DAO("tutu", "tutu", "project_jee");
 	}
 	
@@ -52,7 +52,6 @@ public class ControleurServlet extends HttpServlet {
 		break;
     	case "/Catalogue" : 
             ArrayList<Livre> listBook= new ArrayList<Livre>();
-            System.out.println(request.getParameter("cat"));
             String category;
             if(request.getParameter("cat")==null)
                 category = "all";
@@ -66,9 +65,9 @@ public class ControleurServlet extends HttpServlet {
             {
                 listBook = dao.getAllBook();
             }
-            for(Livre object: listBook){
+            /*for(Livre object: listBook){
               System.out.println(object.toString());
-            }
+            }*/
             request.setAttribute("list_book", listBook);
             this.getServletContext().getRequestDispatcher("/WEB-INF/catalogue.jsp").forward(request, response);
             break;		
@@ -94,7 +93,19 @@ public class ControleurServlet extends HttpServlet {
             request.setAttribute( "user", user );*/
             this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
             break;
-    	
+        case "/VoirPanier" :
+            HttpSession session2 = request.getSession();
+            Utilisateur user = (Utilisateur)session2.getAttribute( "sessionUtilisateur");
+            ArrayList<Livre> cartBooks = new ArrayList<Livre>();
+            cartBooks = dao.getChartBook(user.getEmail());
+            System.out.println("ici = "+user.getEmail());
+            for(Livre object : cartBooks)
+            {
+                System.out.println("la : " + object.toString());
+            }
+            request.setAttribute("cartBooks", cartBooks);
+            this.getServletContext().getRequestDispatcher("/WEB-INF/achat.jsp").forward(request, response);
+            break;
 	
     	}
     }
