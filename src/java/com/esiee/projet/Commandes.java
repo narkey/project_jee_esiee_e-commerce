@@ -7,6 +7,7 @@
 package com.esiee.projet;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -19,22 +20,17 @@ public class Commandes {
     private String date_commande;
     private float prix_total;
     //attributs pour la liste des produits de la commande
-    private ArrayList<Livre> allBooks = new ArrayList<Livre>();
+    private HashMap<Integer, Integer> allBooks = new HashMap<Integer,Integer>(); //contient id du livre en key et la quantite en value
     
     public Commandes() {
         this.id = -1;
         this.email = "";
         this.date_commande = "";
         this.prix_total = (float) -1.1;
-        this.quantite = -1;
     }
 
-    public Commandes(String email, String date_commande, float prix_total, int quantite) {
-        this.id = id;
+    public Commandes(String email) {
         this.email = email;
-        this.date_commande = date_commande;
-        this.prix_total = prix_total;
-        this.quantite = quantite;
     }
 
     public int getId() {
@@ -69,27 +65,13 @@ public class Commandes {
         this.prix_total = prix_total;
     }
 
-    public ArrayList<Livre> getAllbooks() {
+    public HashMap<Integer, Integer>getAllbooks() {
         return allBooks;
     }
-
-    public void setAllbooks(ArrayList<Livre> allbooks) {
-        this.allBooks = allBooks;
-    }
-
-    public int getQuantite() {
-        return quantite;
-    }
-
-    public void setQuantite(int quantite) {
-        this.quantite = quantite;
-    }
-    private int quantite;
     
-    public boolean addCommand(Livre livre)
+    public void addCommand(int livre_id, int quantity)
     {
-        boolean ok = this.allBooks.add(livre);
-        return ok; 
+        this.allBooks.put(livre_id, quantity);
     }
     
 }

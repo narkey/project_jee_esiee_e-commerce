@@ -94,6 +94,7 @@ public class ControleurServlet extends HttpServlet {
             this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
             break;
         case "/VoirPanier" :
+            /*
             HttpSession session2 = request.getSession();
             Utilisateur user = (Utilisateur)session2.getAttribute( "sessionUtilisateur");
             ArrayList<Livre> cartBooks = new ArrayList<Livre>();
@@ -105,6 +106,8 @@ public class ControleurServlet extends HttpServlet {
             }
             request.setAttribute("cartBooks", cartBooks);
             this.getServletContext().getRequestDispatcher("/WEB-INF/achat.jsp").forward(request, response);
+            */
+            
             break;
 	
     	}
@@ -160,7 +163,7 @@ public class ControleurServlet extends HttpServlet {
             		   this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
                    break;
                    
-                
+                   
                case "bookRegister":
                 
                    BookRegisterForm form_book = new BookRegisterForm(dao);
@@ -208,7 +211,29 @@ public class ControleurServlet extends HttpServlet {
                		}
                		
             	   break;
+               case "catalogue":
+                   /* Recuperation de la session depuis la requete */
+           		HttpSession session_book = request.getSession();
+                        Commandes cart_book = (Commandes)session_book.getAttribute("cart_book");
+                        int book_id = Integer.parseInt(request.getParameter("book_id"));
+                        int quantity = 1; 
+                        //Utilisateur user = (Utilisateur)session_book.getAttribute("sessionUtilisateur");
+                        System.out.println("book_id : "+request.getParameter("book_id"));
+                        System.out.println("cart_book : "+cart_book);
+                   if(cart_book==null)
+                   {
+                       cart_book = new Commandes();
+                       session_book .setAttribute("cart_book", cart_book );
+                   }
+                       
+                   cart_book.addCommand(book_id, quantity);
+                   for(int i : cart_book.getAllbooks().keySet())
+                   {
+                       System.out.println("valeur de la clé" + i);
+                   }
                    
+                   response.sendRedirect("Catalogue");
+                   break;
                default:
                    this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
                   break;

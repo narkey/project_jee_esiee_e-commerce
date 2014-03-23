@@ -22,7 +22,7 @@ import com.esiee.projet.Utilisateur;
  */
 public class DAO {
     private Connection connection;
-    
+    private static int IDbook = 0;    
     //Prepared request
     private static final String SQL_INSERT_UTILISATEUR = 
     "INSERT INTO TUTU.UTILISATEURS (NOM, PRENOM, MDP, EMAIL, ADRESSE, ACCES) "
@@ -50,6 +50,8 @@ public class DAO {
     
     private static final String SQL_SELECT_CART = 
         "SELECT  TUTU.COMMANDES.ID, TUTU.LISTE_COMMANDES.ID_COMMANDE, TUTU.LISTE_COMMANDES.ID_PRODUIT,TUTU.LIVRES.* FROM TUTU.COMMANDES INNER JOIN TUTU.LISTE_COMMANDES ON TUTU.COMMANDES.ID = TUTU.LISTE_COMMANDES.ID_COMMANDE INNER JOIN TUTU.LIVRES ON TUTU.LISTE_COMMANDES.ID_PRODUIT = TUTU.LIVRES.ID WHERE TUTU.COMMANDES.EMAIL = ?";
+    
+    
     /*private static final String SQL_INSERT_UTILISATEUR = 
     "INSERT INTO UTILISATEURS (NOM, PRENOM, MDP, EMAIL, ADRESSE, ACCESS) "
         + "VALUES (?, ?, ?, ?, 'MON ADRESSE',5)";
@@ -127,11 +129,12 @@ public class DAO {
     
        public boolean insert_Book (final Livre livre, String categorie)
     {
+        IDbook++;
     	boolean ok = false;
         PreparedStatement preparedStatement = null;
          try {
 
-            preparedStatement = initialisationRequetePreparee( this.connection, SQL_INSERT_LIVRE, true, livre.getId(), livre.getTitre(), livre.getAuteur(),livre.getGenre(),livre.getDescription(),livre.getPrix(),categorie);
+            preparedStatement = initialisationRequetePreparee( this.connection, SQL_INSERT_LIVRE, true, IDbook++ , livre.getTitre(), livre.getAuteur(),livre.getGenre(),livre.getDescription(),livre.getPrix(),categorie);
             int statut = preparedStatement.executeUpdate();
 
             /* Analyse du statut retourné par la requête d'insertion */

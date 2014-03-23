@@ -28,16 +28,20 @@
         <th>Acheter ?</th>
      	</tr></thead>
 
-	<tbody>     
+	<tbody>
+        <form method="post" action="ControleurServlet" class="form-horizontal" role="form">
 	<c:forEach items="${list_book}" var="book">
 		<tr>
 			<td><c:out value="${book.titre}" /></td>
 			<td><c:out value="${book.auteur}" /></td>
 			<td><c:out value="${book.description}" /></td>
 			<td><c:out value="${book.prix}" /></td>
+                <input type="hidden" name="origin" value="catalogue"/>
                         <td><button type="submit" class="btn btn-primary" name="book_id" value="${book.id}">Ajouter au panier</td>
+                        
 		</tr>
 	</c:forEach>
+        </form>
 	</tbody>
    </table>         
       

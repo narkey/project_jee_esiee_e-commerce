@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+/*********************************là tu prend tout c'est bon :D !************************/
 package com.esiee.projet;
 import javax.servlet.http.HttpServletRequest;
 /**
@@ -55,28 +55,28 @@ public final class BookRegisterForm extends Form{
                             setErreur( CHAMP_TYPE , e.getMessage() );
                     }
 
-                    if(type.equals("Mangas")){
+                    if(type.equals("Mangas") &&  dao.insert_Book(livre, "Manga")){
                  
-                        dao.insert_Book(livre, "Manga");
+                       this.resultat = "Ajout d'un manga";
                      
                     }
                     
-                    if(type.equals("Comics")){
-                      dao.insert_Book(livre, "Comic");
+                    else if(type.equals("Comics") && dao.insert_Book(livre, "Comic")){
+                      this.resultat ="Ajout d'un Comic";
                     }
                     
-                    if(type.equals("BD")){
-                       dao.insert_Book(livre, "Bd");
+                    else if(type.equals("BD") && dao.insert_Book(livre, "Bd")){
+                       this.resultat = "Ajout d'une BD";
                     }
+                    else {
+				setErreur(null, "Erreur lors de la modification du profil de l'utilisateur.");
+				this.resultat = "Erreur technique (SQL).";
+			}
 
 		}
                 
                 return livre;
 	}
-
-        
-        
-        
 	
 	private void traiterTitre( String titre, Livre livre) {
 		
