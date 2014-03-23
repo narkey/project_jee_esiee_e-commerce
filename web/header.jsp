@@ -22,11 +22,11 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-list"></span>&nbsp;&nbsp;Cat&eacute;gories <b class="caret"></b></a>
           <ul class="dropdown-menu">
-          	<li><a href="/Catalogue"><span class="glyphicon glyphicon-book"></span>&nbsp;&nbsp;Catalogue</a></li>
+          	<li><a href="Catalogue"><span class="glyphicon glyphicon-book"></span>&nbsp;&nbsp;Catalogue</a></li>
           	<li class="divider"></li>
-            <li><a href="/BD">BD franco-belge</a></li>
-            <li><a href="/Comics">Comics am&eacute;ricain</a></li>
-            <li><a href="/Mangas">Mangas / manhwas</a></li>
+            <li><a href="Catalogue?cat=bd">BD franco-belge</a></li>
+            <li><a href="Catalogue?cat=comic">Comics am&eacute;ricain</a></li>
+            <li><a href="Catalogue?cat=manga">Mangas / manhwas</a></li>
           </ul>
         </li>
       </ul>
