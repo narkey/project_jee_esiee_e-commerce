@@ -15,20 +15,19 @@
         <c:import url="../header.jsp"></c:import>    
         <script language="javascript">
         var nb_art=0; //nb article
-        var prix=0; //prix
+        var total=0; //total
+        var prix = 0;
+        function modifier(increment, nb_art, prix) {
 
-
-        function modifier(increment,prix) {
-
-                valeur+=increment;
-                valeur2+=prix;
-              if(valeur>=0&&valeur2>=0){   
-                document.getElementById('nb').value=valeur;
-                document.getElementById('prix').value=valeur2;
+                nb_art =  nb_art + increment;
+                total = total + nb_art * prix;
+              if(nb_art>=0&&total>=0){   
+                document.getElementById('nb_art').value=nb_art;
+                document.getElementById('total').value=total;
             }else
             {
-                valeur=0;
-                valeur2=0;
+                nb_art=0;
+                total=0;
             }
         }
 
@@ -39,18 +38,32 @@
     <form class="form-inline">
     <div class="container container-fluid">
     <legend for="text">Nombre d'article :</legend>
-    <input class="form-control" type="text" id="nb" name="value">
-    
-    <input class="btn btn-info" type="button" value="+" onClick="modifier(1,50)">
-    <input class="btn btn-danger" type="button" value="-" onClick="modifier(-1,-50)">
-      
-    <button type="submit" class="btn btn-warning">Voir mon panier</button>
-    
-    </br></br>
-    
+    <input class="form-control" type="text" id="nb_art" name="nb_art">
+
+         <table class="table table-striped">
+         <form>
+	<thead><tr>
+        <th>Article</th>
+        <th>Prix unitaire</th>
+        <th>Quantit&eacute;</th>
+        <th>Modifier</th>
+     	</tr></thead>
+
+	<tbody>     
+	<c:forEach items="${cartBooks}" var="book">
+		<tr>
+			<td><c:out value="${book.titre}" /></td>
+			<td><c:out value="${book.prix}" /></td>
+                        <td><input class="form-control" type="text" id="nb_art" name="nb_art" ></td>
+                        <td><input class="btn btn-info" type="button" value="+" onClick="modifier(1,1,<c:out value="${book.prix}" />)">
+                            <input class="btn btn-danger" type="button" value="-" onClick="modifier(-1,-1,<c:out value="${book.prix}" />)"></td>
+		</tr>
+	</c:forEach>
+	</tbody>
+         
+   </table>   
     <legend for="text">Prix total :</legend>
-    <input class="form-control" type="text" id="prix" name="value2">
-    
+    <input class="form-control" type="text" id="total" name="total">
     <script language="javascript">
     document.getElementById('text').value=valeur;
     
@@ -61,26 +74,6 @@
     <button type="submit" class="  btn btn-success btn-lg"><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;&nbsp;Acheter</button>
     
     </form>
-    
-     <table class="table table-striped">
-	<thead><tr>
-        <th>Article</th>
-        <th>Prix unitaire</th>
-        <th>Quantit&eacute;</th>
-        <th></th>
-     	</tr></thead>
-
-	<tbody>     
-	<c:forEach items="${cartBooks}" var="book">
-		<tr>
-			<td><c:out value="${book.titre}" /></td>
-			<td><c:out value="${book.prix}" /></td>
-
-		</tr>
-	</c:forEach>
-	</tbody>
-   </table>   
-    
     <script src="jquery/css/start/images/jquery-ui.min.js"></script>    
     <script src="jquery/js/jquery-ui.min.js"></script> 
     <script src="bootstrap/js/jquery.min.js"></script>
