@@ -72,14 +72,15 @@ public class InscriptionForm extends Form {
 				validationChampRequis(confirmation);
 			}
 			validationMotsDePasse( motDePasse, confirmation );
+			String motDePasseChiffre = this.MD5(motDePasse);
+			utilisateur.setMdp( motDePasseChiffre );
 		}
 		catch ( Exception e ) {
 			setErreur( CHAMP_PASS, e.getMessage() );
 			setErreur( CHAMP_CONF, e.getMessage() );
 		}
 
-		String motDePasseChiffre = this.MD5(motDePasse);
-		utilisateur.setMdp( motDePasseChiffre );
+		
 
 	}
 

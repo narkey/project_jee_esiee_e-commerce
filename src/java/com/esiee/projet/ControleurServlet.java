@@ -8,6 +8,8 @@ package com.esiee.projet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -24,7 +26,8 @@ import javax.servlet.http.HttpSession;
  */
 
 public class ControleurServlet extends HttpServlet {
-    
+    	private ArrayList<Livre> alBooks;	
+
 	private DAO dao;
 	
 	/**
@@ -36,12 +39,14 @@ public class ControleurServlet extends HttpServlet {
 	public void init() throws ServletException {
 		/* Recuperation d'une instance de notre DAO Utilisateur */
 		this.dao = new DAO("tutu", "tutu", "project_jee");
+                alBooks = dao.getAllBook();
 	}
 	
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	
+    	HttpSession session = request.getSession();
+        Utilisateur user = (Utilisateur)session.getAttribute( "sessionUtilisateur");
     	switch(request.getServletPath()) {
     	
     	case "/Connexion" : this.getServletContext().getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
@@ -79,45 +84,81 @@ public class ControleurServlet extends HttpServlet {
     	case "/Deconnexion" :
     		
     		/* Recuperation et destruction de la session en cours */
-    		HttpSession session = request.getSession();
+    		
     		session.invalidate();
     		
     		/* Redirection vers la page de connexion */
     		response.sendRedirect( this.getServletContext().getContextPath() + "/Index");
     		break;
     	
-    	case "/AjouterRef" : this.getServletContext().getRequestDispatcher("/WEB-INF/test.jsp").forward(request, response);
+    	case "/AjouterRef" : this.getServletContext().getRequestDispatcher("/WEB-INF/bookregister.jsp").forward(request, response);
 			break;
+    	case "/Recap" : 
+    		
+    		request.setAttribute("list_customers", dao.getAllUser());
+    		request.setAttribute("list_commands", dao.getAllCommands());
+    		
+    		this.getServletContext().getRequestDispatcher("/WEB-INF/recap.jsp").forward(request, response);
+		break;
+    	
+    	case "/Commands" : 
+    		
+    		request.setAttribute("list_commands_user", dao.getAllCommandsByUser(((Utilisateur)session.getAttribute("sessionUtilisateur")).getEmail()));
+    		
+    		this.getServletContext().getRequestDispatcher("/WEB-INF/recap_user.jsp").forward(request, response);
+		
+    	break;			
         case "/Confirmation"  :
-            /* Recuperation de la session depuis la requete */
-            /*HttpSession session2 = request.getSession();
-            Utilisateur user = (Utilisateur)session2.getAttribute( "sessionUtilisateur");
-            request.setAttribute( "user", user );*/
-            this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
-            break;
-        case "/VoirPanier" :
-            
-            HttpSession sessionUser = request.getSession();
-            Utilisateur user = (Utilisateur)sessionUser.getAttribute( "sessionUtilisateur");
-            Commandes cart_book = (Commandes)sessionUser.getAttribute("cart_book");
+            Commandes cart_book = (Commandes)session.getAttribute("cart_book");
+    		if(user != null) {
+    			 cart_book.setEmail(user.getEmail());
+    			this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
+    		}
+    		else {
+            this.getServletContext().getRequestDispatcher("/WEB-INF/connexion.jsp").forward(request, response);
+            }
+			break;
+			
+        case "/VoirPanier" :          
+           cart_book = (Commandes)session.getAttribute("cart_book");
             if(cart_book!=null)
             {
-                cart_book.setEmail(user.getEmail());
+               
                 request.setAttribute("list_book", cart_book.getAllbooks());
             }
                 this.getServletContext().getRequestDispatcher("/WEB-INF/achat.jsp").forward(request, response);
-            /*ArrayList<Livre> cartBooks = new ArrayList<Livre>();
-            cartBooks = dao.getChartBook(user.getEmail());
-            System.out.println("ici = "+user.getEmail());
-            for(Livre object : cartBooks)
-            {
-                System.out.println("la : " + object.toString());
-            }
-            request.setAttribute("cartBooks", cartBooks);
-            */
             
             break;
-	
+    	case "/ViderPanier":
+    		Commandes panier2 = (Commandes) session.getAttribute("cart_book");
+    		panier2.getAllbooks().clear();
+    		session.setAttribute("cart_book", null);
+    		session.setAttribute("prixTotal", null);
+    		
+    		/* Redirection vers la page de connexion */
+    		response.sendRedirect( this.getServletContext().getContextPath() + "/VoirPanier");
+    	break;
+    	
+    	case "/ChangeMDP" :
+    		if(user != null) {
+    			
+    			this.getServletContext().getRequestDispatcher("/WEB-INF/changePassword.jsp").forward(request, response);
+    		}
+    		else {
+    			/* Redirection vers la page de connexion */
+        		response.sendRedirect( this.getServletContext().getContextPath() + "/Connexion");
+    		}
+    	break;
+    	
+    	case "/detailsCommande":
+    		
+    		ArrayList<HashMap<String, String>> details = dao.getDetailsCommand(Integer.parseInt(request.getParameter("idCmd")));
+    		
+    		request.setAttribute("listeDetails", details);
+            
+    		this.getServletContext().getRequestDispatcher("/WEB-INF/details.jsp").forward(request, response);
+    	
+    	break;	
     	}
     }
 
@@ -125,6 +166,9 @@ public class ControleurServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+                int total = 0;
+                /* Recuperation de la session depuis la requete */
+                HttpSession session = request.getSession();
            switch(request.getParameter("origin"))
            {
                case "connect":    
@@ -134,9 +178,6 @@ public class ControleurServlet extends HttpServlet {
            		
            		/* Appel au traitement et a la validation de la requete, et recuperation du bean en resultant */
            		Utilisateur user = form.connecterUtilisateur( request );
-
-           		/* Recuperation de la session depuis la requete */
-           		HttpSession session = request.getSession();
            		
            		/* Si aucune erreur de validation, alors ajout du bean Utilisateur a la session, sinon suppression du bean de la session */
            		if (form.getErreurs().isEmpty()) {
@@ -168,7 +209,7 @@ public class ControleurServlet extends HttpServlet {
             		   /* Affichage de la page d'inscription */
             		   this.getServletContext().getRequestDispatcher( "/WEB-INF/inscription.jsp" ).forward( request, response );
             	   else
-            		   this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
+            		   this.getServletContext().getRequestDispatcher( "/connexion.jsp" ).forward( request, response );
                    break;
                    
                    
@@ -188,10 +229,7 @@ public class ControleurServlet extends HttpServlet {
             	   else
             		   this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
                    break;
-                   
-                    
 
-                   
                case "edit_profil":
             	   
             	   /* Preparation de l'objet formulaire */
@@ -200,13 +238,12 @@ public class ControleurServlet extends HttpServlet {
               		/* Appel au traitement et a la validation de la requete, et recuperation du bean en resultant */
               		Utilisateur user_edit = edit_form.modifierUtilisateur( request );
 
-              		/* Recuperation de la session depuis la requete */
-              		HttpSession session2 = request.getSession();
+
               		
               		/* Si aucune erreur de validation, alors ajout du bean Utilisateur a la session, sinon suppression du bean de la session */
                		if (edit_form.getErreurs().isEmpty()) {
-               			session2.setAttribute( "sessionUtilisateur", null );
-               			session2.setAttribute( "sessionUtilisateur", user_edit );
+               			session.setAttribute( "sessionUtilisateur", null );
+               			session.setAttribute( "sessionUtilisateur", user_edit );
                			response.sendRedirect( this.getServletContext().getContextPath() + "/index.jsp");
                		}
                		else {
@@ -219,6 +256,44 @@ public class ControleurServlet extends HttpServlet {
                		}
                		
             	   break;
+                case "supp_livre":
+                	Livre aRetirer = alBooks.get(Integer.parseInt(request.getParameter("id_produit")) - 1);
+                	Commandes panier = (Commandes) session.getAttribute("cart_book");
+                	if(panier.getAllbooks().containsKey(aRetirer)) {
+                		System.out.println("Le livre existe dans la liste !");
+                		Iterator<Livre> itLivre = panier.getAllbooks().keySet().iterator();
+                		while ( itLivre.hasNext()) {
+                			Livre livreCourant = itLivre.next();
+                			if(livreCourant.getId() == Integer.parseInt(request.getParameter("id_produit")) ) {
+                				float prix = (float) session.getAttribute("prixTotal");
+                        		prix -= livreCourant.getPrix();
+                        		session.setAttribute("prixTotal", prix);
+                				itLivre.remove();
+                			}
+                		}
+                	}
+                	session.setAttribute("cart_book", panier);
+                	response.sendRedirect(this.getServletContext().getContextPath() +"/VoirPanier");
+                break;
+                case "change_mdp":
+                	
+                	/* Preparation de l'objet formulaire */
+            		PasswordForm password_form = new PasswordForm(dao);
+            		
+            		/* Verification du formulaire et modifications */
+            		if(!password_form.modifierPasswordUtilisateur(request, ((Utilisateur)session.getAttribute("sessionUtilisateur")).getEmail())) {
+            		
+	            		/* Stockage du formulaire et du bean dans l'objet request */
+	            		request.setAttribute( "form", password_form );
+	            		
+	            		/* Affichage de la page de gestion de compte */
+	            		this.getServletContext().getRequestDispatcher( "/WEB-INF/changePassword.jsp" ).forward( request, response );
+            		}
+            		else
+            			/* Affichage de la page de gestion de compte */
+                		this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
+                break;
+                				   
                case "catalogue":
                    /* Recuperation de la session depuis la requete */
            		HttpSession session_book = request.getSession();
@@ -231,7 +306,7 @@ public class ControleurServlet extends HttpServlet {
                    if(cart_book==null)
                    {
                        cart_book = new Commandes();
-                       session_book .setAttribute("cart_book", cart_book );
+                       session_book.setAttribute("cart_book", cart_book );
                    }
                        
                    cart_book.addCommand(dao.getBookFromId(book_id), quantity);
@@ -243,11 +318,22 @@ public class ControleurServlet extends HttpServlet {
                    response.sendRedirect("Catalogue");
                    break;
                case "achat":
-                   HttpSession sessionAchat= request.getSession();
+                   HttpSession sessionAchat = request.getSession();
                    cart_book = (Commandes)sessionAchat.getAttribute("cart_book");
-                   int qty = Integer.parseInt(request.getParameter("quantity"));
-                   int bookId = Integer.parseInt(request.getParameter("book_id"));
+                   int qty = 0;
+                   int bookId = 0;
+                   //TODO FAIRE TRY CATCH
+                        qty = Integer.parseInt(request.getParameter("quantite"));
+                        bookId = Integer.parseInt(request.getParameter("book_id")); 
+                   
                    user = (Utilisateur)sessionAchat.getAttribute("sessionUtilisateur");
+
+                   for(Entry<Livre, Integer>entry : cart_book.getAllbooks().entrySet())
+                    {
+                        total+=entry.getKey().getPrix()*entry.getValue();
+                    }
+                    request.setAttribute("total", total);
+                    request.setAttribute("list_book", cart_book.getAllbooks());
                    if(request.getParameter("bouton").equals("maj"))
                    {                    
                         if(cart_book!=null)
@@ -260,16 +346,25 @@ public class ControleurServlet extends HttpServlet {
                
                    else
                    {
-                       int total = 0;
-          
-                   for(Entry<Livre, Integer>entry : cart_book.getAllbooks().entrySet())
-                   {
-                           total+=entry.getKey().getPrix()*entry.getValue();
-                       }
-                       cart_book.setPrix_total(total);
-                      cart_book.setEmail(user.getEmail());
-                      dao.insertCommands(cart_book);
+                       this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
                    }
+                  
+                   break;
+               case "confirmation":
+                   HttpSession sessionConf = request.getSession();
+                   cart_book = (Commandes)sessionConf.getAttribute("cart_book");
+                     user = (Utilisateur)sessionConf.getAttribute("sessionUtilisateur");
+                   if(request.getParameter("bouton").equals("ok"))
+                   {
+                       cart_book.setPrix_total(total);
+                       cart_book.setEmail(user.getEmail());
+                       dao.insertCommands(cart_book); 
+                   }
+                   else
+                   {
+                       this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+                   }
+                        
                    break;
                default:
                    this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);

@@ -30,22 +30,33 @@
         </c:if>
 
     <legend>Liste d'achat</legend>     
-   
-	<table class="table table-striped">
-    	<thead><tr>
-	    <th>Titre</th>
-	    <th>Genre</th>
-	</tr></thead>
-        
-	<tbody>
-
-	</tbody>
-	</table>                      
-
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Article</th>
+                    <th>Prix unitaire</th>
+                    <th>Quantit&eacute;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach items="${list_book}" var="book">
+                <tr>
+                    <td><c:out value="${book.key.titre}"/></td>
+                    <td><c:out value="${book.key.prix}"/></td>
+                    <td><c:out value='${book.value}'/></td>
+                    <input type="hidden" name="book_id" value="${book.key.id}"/>
+                </tr>
+                </c:forEach>
+            </tbody>
+        </table>               
+        <legend for="text">Prix total :</legend>
+        <c:out value="${total}"/><br/>
+        <form method="post" action="ControleurServlet" class="form-horizontal" role="form">
+            <input type="hidden" name="origin" value="confirmation"/>
+            <button type="submit" class="btn btn-primary" name="bouton" value="ok">confirmer</button>
+            <button type="submit" class="btn" name="bouton" value="cancel">annuler</button>
          
-         <button type="submit" class="btn btn-primary" name="confirmer">confirmer</button>
-         <button type="submit" class="btn" name="annuler">annuler</button>
-                
+        </form>         
         </div>
         <!-- Le javascript
 		================================================== -->

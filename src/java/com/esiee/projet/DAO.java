@@ -15,6 +15,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.esiee.projet.Utilisateur;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -43,7 +44,7 @@ public class DAO {
         "SELECT * FROM TUTU.UTILISATEURS  WHERE EMAIL = ?";
     
     private static final String SQL_SELECT_ALLUSER = 
-        "SELECT * FROM TUTU.UTILISATEURS";
+        "SELECT * FROM TUTU.UTILISATEURS WHERE ACCES > 2";
     
     private static final String SQL_SELECT_ALLBOOK = 
     	 "SELECT * FROM TUTU.LIVRES";
@@ -71,14 +72,14 @@ public class DAO {
     	+ "WHERE EMAIL = ?";
     
     private static final String SQL_INSERT_LIVRE = 
-     "INSERT INTO LIVRES ( TITRE, AUTEUR, GENRE, DESCRIPTION, PRIX) "
-     + "VALUES (?, ?, ?, ?, ?)";
+     "INSERT INTO LIVRES ( ID,TITRE, AUTEUR, GENRE, DESCRIPTION, PRIX, CATEGORIE) "
+     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
     
     private static final String SQL_SELECT_PK = 
         "SELECT * FROM UTILISATEURS  WHERE EMAIL = ?";
     
     private static final String SQL_SELECT_ALLUSER = 
-        "SELECT * FROM UTILISATEURS";
+        "SELECT * FROM UTILISATEURS WHERE ACCESS > 2";
     
     private static final String SQL_SELECT_ALLBOOK = 
     	 "SELECT * FROM LIVRES";
@@ -87,6 +88,25 @@ public class DAO {
     	 "SELECT * FROM LIVRES WHERE CATEGORIE = ?";
     */
     
+    private static final String SQL_SELECT_ALL_COMMANDS =
+    	"SELECT TUTU.COMMANDES.ID,  TUTU.COMMANDES.EMAIL,  TUTU.COMMANDES.DATE_COMMANDE,  TUTU.COMMANDES.PRIX,  TUTU.UTILISATEURS.ADRESSE "
+    	+ "FROM  TUTU.COMMANDES "
+    	+ "INNER JOIN  TUTU.UTILISATEURS ON  TUTU.UTILISATEURS.EMAIL =  TUTU.COMMANDES.EMAIL"
+    	+ " ORDER BY  TUTU.COMMANDES.ID ASC";
+    
+    private static final String SQL_SELECT_ALL_COMMANDS_BY_USER =
+        "SELECT  TUTU.UTILISATEURS.ADRESSE, comm.ID, comm.DATE_COMMANDE, comm.PRIX "
+        + "FROM UTILISATEURS "
+        + "INNER JOIN  TUTU.COMMANDES comm ON comm.EMAIL = UTILISATEURS.EMAIL "
+        + "WHERE UTILISATEURS.EMAIL = ?";
+        
+    private static final String SQL_SELECT_DETAILS_COMMAND =
+        	"SELECT  TUTU.LISTE_COMMANDES.QUANTITE, book.TITRE, book.AUTEUR, book.GENRE, book.PRIX"
+        	+ " FROM  TUTU.LISTE_COMMANDES"
+        	+ " INNER JOIN LIVRES book on TUTU.LISTE_COMMANDES.ID_PRODUIT = book.ID "
+        	+ " WHERE TUTU.LISTE_COMMANDES.ID_COMMANDE = ?";
+ 	private static final String SQL_UPDATE_MDP = "UPDATE TUTU.Utilisateurs SET MDP = ? WHERE EMAIL = ?";
+       
     /**
 	 * Sélectionne un utilisateur en fonction de son login.
 	 */
@@ -142,9 +162,9 @@ public class DAO {
         IDbook++;
     	boolean ok = false;
         PreparedStatement preparedStatement = null;
-         try {
-
-            preparedStatement = initialisationRequetePreparee( this.connection, SQL_INSERT_LIVRE, true, IDbook++ , livre.getTitre(), livre.getAuteur(),livre.getGenre(),livre.getDescription(),livre.getPrix(),categorie);
+          try {       	 
+        	 livre.setId(IDbook);
+            preparedStatement = initialisationRequetePreparee( this.connection, SQL_INSERT_LIVRE, true, livre.getId(), livre.getTitre(), livre.getAuteur(),livre.getGenre(),livre.getDescription(),livre.getPrix(),categorie);
             int statut = preparedStatement.executeUpdate();
 
             /* Analyse du statut retourné par la requête d'insertion */
@@ -243,6 +263,42 @@ public class DAO {
         return list;
         
      }
+
+    public ArrayList<HashMap<String, String>> getDetailsCommand(int id_cmd){
+        
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        ArrayList<HashMap<String, String>> listDetails = new ArrayList<HashMap<String, String>>();
+        HashMap<String, String> details = new HashMap<String, String>();
+        
+        
+        try {
+          
+            preparedStatement = initialisationRequetePreparee( this.connection, SQL_SELECT_DETAILS_COMMAND, true, id_cmd );
+            resultSet = preparedStatement.executeQuery();
+            
+           
+            while(resultSet.next()) {
+                    
+            details.put("quantite", String.valueOf(resultSet.getInt(1)));
+            details.put("titre", resultSet.getString(2));
+            details.put("auteur", resultSet.getString(3));
+            details.put("genre", resultSet.getString(4));
+            details.put("prix", String.valueOf(resultSet.getFloat(5)));
+            
+            listDetails.add(details);
+            details = new HashMap<String, String>();
+        }
+        
+            resultSet.close();
+        } catch(SQLException sqle) {
+            System.out.println("" + sqle);
+        }
+        
+        return listDetails;
+        
+     }
+    
     public ArrayList<Livre> getAllBook()
     {
        PreparedStatement preparedStatement = null;
@@ -253,7 +309,7 @@ public class DAO {
            preparedStatement = initialisationRequetePreparee( this.connection, SQL_SELECT_ALLBOOK, true);
            resultSet = preparedStatement.executeQuery();
            while(resultSet.next()) {
-           //L'utilisateur a �t� trouv� dans notre base"
+           //L'utilisateur a ete trouve dans notre base"
            list.add(map_livre( resultSet ));            
        }
        
@@ -277,7 +333,7 @@ public class DAO {
 
            if(resultSet.next()) {
 
-               //L'utilisateur a �t� trouv� dans notre base"
+               //L'utilisateur a ete trouve dans notre base"
                list.add(map_livre( resultSet ));
 
            }
@@ -313,6 +369,67 @@ public class DAO {
            }
 
        return list;
+    }
+
+    public ArrayList<HashMap<String, String>> getAllCommands()
+    {
+       PreparedStatement preparedStatement = null;
+       ResultSet resultSet = null;
+       ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+       HashMap<String, String> map = new HashMap<String, String>();
+       
+       try {
+           preparedStatement = initialisationRequetePreparee( this.connection, SQL_SELECT_ALL_COMMANDS, true);
+           resultSet = preparedStatement.executeQuery();
+           while(resultSet.next()) {
+        	   
+        	   map.put("id", String.valueOf(resultSet.getInt(1)));
+        	   map.put("email", resultSet.getString(2));
+        	   map.put("date", resultSet.getDate(3).toString());
+        	   map.put("prix", String.valueOf(resultSet.getFloat(4)));
+        	   map.put("adresse", resultSet.getString(5));
+        	   
+        	   list.add(map);
+        	   map = new HashMap<String, String>();
+           }
+       
+       resultSet.close();
+       } catch(SQLException sqle) {
+           System.out.println("" + sqle);
+       }
+       
+       return list;
+       
+    }
+    
+    public ArrayList<HashMap<String, String>> getAllCommandsByUser(String email)
+    {
+       PreparedStatement preparedStatement = null;
+       ResultSet resultSet = null;
+       ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+       HashMap<String, String> map = new HashMap<String, String>();
+       
+       try {
+           preparedStatement = initialisationRequetePreparee( this.connection, SQL_SELECT_ALL_COMMANDS_BY_USER, true, email);
+           resultSet = preparedStatement.executeQuery();
+           while(resultSet.next()) {
+        	   
+        	   map.put("id", String.valueOf(resultSet.getInt(2)));
+        	   map.put("date", resultSet.getDate(3).toString());
+        	   map.put("prix", String.valueOf(resultSet.getFloat(4)));
+        	   map.put("adresse", resultSet.getString(1));
+        	   
+        	   list.add(map);
+        	   map = new HashMap<String, String>();
+           }
+       
+       resultSet.close();
+       } catch(SQLException sqle) {
+           System.out.println("" + sqle);
+       }
+       
+       return list;
+       
     }
     public Livre getBookFromId(int book_id)
     {
@@ -373,7 +490,36 @@ public class DAO {
             e.printStackTrace();
         } 
          return ok;
-    }        
+    }
+
+
+    public boolean updateMdp( String mdp, String email )  {
+		
+		PreparedStatement preparedStatement = null;
+		boolean update = false;
+		try {
+			
+			/*
+             * Preparation de la requete avec les objets passes en arguments
+             * (ici adresse email et mdp) et execution.
+             */
+			//System.out.println("Email>" + email + "\nMDP>" + mdp);
+			preparedStatement = initialisationRequetePreparee( connection, SQL_UPDATE_MDP, true, mdp, email );
+			int statut = preparedStatement.executeUpdate();
+			
+			/* Analyse du statut retournÃ© par la requÃªte d'insertion */
+			if ( statut == 0 ) {
+				System.out.println( "Echec de la modification de l'utilisateur." );
+			}
+			else
+				update = true;
+			
+		} catch ( SQLException e ) {
+			System.err.println( e.getMessage() );
+		}
+		
+		return update;
+	}        
     public static PreparedStatement initialisationRequetePreparee(Connection connexion, String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException 
     {
         PreparedStatement preparedStatement = connexion.prepareStatement( sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS );

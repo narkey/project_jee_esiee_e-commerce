@@ -17,7 +17,7 @@ public  class Livre {
     protected String genre;
     protected String description;
     protected float prix;
-
+    
     public Livre() {
         this.id=-1;
         this.titre = "";
@@ -40,7 +40,7 @@ public  class Livre {
         return this.id;
     }
 
-    public void setTitre(int id) {
+    public void setId(int id) {
         this.id = id;
     }
     

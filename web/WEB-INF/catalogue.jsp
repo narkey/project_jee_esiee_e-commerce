@@ -19,32 +19,38 @@
     <h1>Liste des articles disponibles</h1>
         <br/><br/><br/>
         <legend>Liste des articles disponibles</legend>
+        
+    <form action="ControleurServlet" class="form-horizontal" method="post">     
+	
     <table class="table table-striped">
 	<thead><tr>
-        <th>Titre</th>
-        <th>Auteur</th>
-        <th>Description</th>
+        <th><span class="glyphicon glyphicon-tag"></span>&nbsp;&nbsp;Titre</th>
+        <th><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;Auteur</th>
+        <th><span class="glyphicon glyphicon-picture"></span>&nbsp;&nbsp;Genre</th>
+        <th><span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;Description</th>
         <th>Prix</th>
-        <th>Acheter ?</th>
+        <th><span class="glyphicon glyphicon-shopping-cart"></span>&nbsp;&nbsp;Acheter</th>
      	</tr></thead>
 
 	<tbody>
-        <form method="post" action="ControleurServlet" class="form-horizontal" role="form">
 	<c:forEach items="${list_book}" var="book">
 		<tr>
 			<td><c:out value="${book.titre}" /></td>
 			<td><c:out value="${book.auteur}" /></td>
+			<td><c:out value="${book.genre}" /></td>
 			<td><c:out value="${book.description}" /></td>
-			<td><c:out value="${book.prix}" /></td>
-                <input type="hidden" name="origin" value="catalogue"/>
-                        <td><button type="submit" class="btn btn-primary" name="book_id" value="${book.id}">Ajouter au panier</td>
-                        
+			<td><c:out value="${book.prix}" />  <span class="glyphicon glyphicon-euro"></span></td>
+			<td><form action="" method="post" class="form-inline"><input type="hidden" name="origin" value="catalogue"/>
+			<input type="hidden" name="cat" value="<c:out value="${param['cat']}"></c:out>"/>
+            <input type="hidden" name="book_id" value="<c:out value="${book.id}"></c:out>"/>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>&nbsp;&nbsp;Ajouter au panier</button></form></td>
+            
 		</tr>
 	</c:forEach>
-        </form>
 	</tbody>
    </table>         
-      
+   </form>
+ 
    <!--
    <blockquote class="blockquote-reverse">
     	<p><b>Merci pour ces informations. <br/> Votre problème sera résolu dans les 24H.</b></p>
@@ -57,5 +63,5 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="bootstrap/js/jquery.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
-    </body>
+        </body>
 </html>

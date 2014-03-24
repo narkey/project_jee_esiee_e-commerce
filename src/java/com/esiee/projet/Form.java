@@ -77,7 +77,7 @@ public class Form {
 		
 		if ( motDePasse != null && confirmation != null ) {
 			if ( !motDePasse.equals( confirmation ) ) {
-				throw new FormValidationException( "Les mots de passe entr&eacute;s sont diff&eacute;rents, merci de les saisir &agrave;  nouveau." );
+				throw new FormValidationException( "Les mots de passe entr&eacute;s sont diff&eacute;rents, merci de les saisir &agrave;a nouveau." );
 			} 
 			else if ( motDePasse.length() < 3 ) {
 				throw new FormValidationException( "Les mots de passe doivent contenir au moins 3 caract&egrave;res." );
@@ -92,7 +92,7 @@ public class Form {
 		if( codePostal != null)
 		{
 			if ( !codePostal.matches("[0-9]{5}")) {
-				throw new FormValidationException( "Merci de saisir un num&eacute;ro valide &agrave;  5 chiffres." );
+				throw new FormValidationException( "Merci de saisir un num&eacute;ro valide &agrave;a 5 chiffres." );
 			}
 		}
 	}
@@ -111,7 +111,7 @@ public class Form {
 		if( numTel != null)
 		{
 			if ( !numTel.matches("[0-9]{10}")) {
-				throw new FormValidationException( "Merci de saisir un num&eacute;ro valide &agrave;  10 chiffres." );
+				throw new FormValidationException( "Merci de saisir un num&eacute;ro valide &agrave;a 10 chiffres." );
 			}
 		}
 	}

@@ -36,9 +36,9 @@ public class ClientFilter implements Filter{
 				|| chemin.startsWith( "/Inscription" ) 
 				|| chemin.startsWith( "/Index" ) 
 				|| chemin.startsWith( "/Catalogue" ) 
-				|| chemin.startsWith( "/Mangas" ) 
-				|| chemin.startsWith( "/Comics" ) 
-				|| chemin.startsWith( "/BD" ) 
+				|| chemin.startsWith( "/VoirPanier" ) 
+				|| chemin.startsWith( "/ViderPanier" ) 
+				|| chemin.startsWith( "/Confirmation" ) 
 				|| chemin.startsWith( "/img" ) 
 				|| chemin.startsWith( "/index.jsp" ) 
 				|| chemin.startsWith( "/header.jsp" ) 
@@ -57,7 +57,7 @@ public class ClientFilter implements Filter{
 	
 		if ( session.getAttribute( "sessionUtilisateur" ) == null ) {
 			/* Redirection vers la page publique */
-			request.getRequestDispatcher( "/Connexion" ).forward( request, response );
+			request.getRequestDispatcher( "/Index" ).forward( request, response );
 			
 		} else {
 				/* Affichage de la page restreinte */
