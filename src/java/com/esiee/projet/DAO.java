@@ -15,6 +15,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.esiee.projet.Utilisateur;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 /**
  *
@@ -22,7 +24,8 @@ import com.esiee.projet.Utilisateur;
  */
 public class DAO {
     private Connection connection;
-    private static int IDbook = 0;    
+    private static int IDbook = 0;  
+    private static int IDCommand = 0;
     //Prepared request
     private static final String SQL_INSERT_UTILISATEUR = 
     "INSERT INTO TUTU.UTILISATEURS (NOM, PRENOM, MDP, EMAIL, ADRESSE, ACCES) "
@@ -51,7 +54,14 @@ public class DAO {
     private static final String SQL_SELECT_CART = 
         "SELECT  TUTU.COMMANDES.ID, TUTU.LISTE_COMMANDES.ID_COMMANDE, TUTU.LISTE_COMMANDES.ID_PRODUIT,TUTU.LIVRES.* FROM TUTU.COMMANDES INNER JOIN TUTU.LISTE_COMMANDES ON TUTU.COMMANDES.ID = TUTU.LISTE_COMMANDES.ID_COMMANDE INNER JOIN TUTU.LIVRES ON TUTU.LISTE_COMMANDES.ID_PRODUIT = TUTU.LIVRES.ID WHERE TUTU.COMMANDES.EMAIL = ?";
     
-    
+    private static final String SQL_SELECT_BOOK_FROM_ID = 
+         "SELECT * FROM TUTU.LIVRES WHERE ID = ?";
+    private static final String SQL_INSERT_COMMAND = 
+         "INSERT INTO TUTU.COMMANDES (ID, EMAIL, DATE_COMMANDE, PRIX)"
+            + "VALUES(?,?,?,?)";  
+    private static final String SQL_INSERT_LIST_PRODUCT_COMMAND = 
+         "INSERT INTO TUTU.LISTE_COMMANDES (ID_COMMANDE, ID_PRODUIT, QUANTITE)"
+            + "VALUES(?,?,?)";  
     /*private static final String SQL_INSERT_UTILISATEUR = 
     "INSERT INTO UTILISATEURS (NOM, PRENOM, MDP, EMAIL, ADRESSE, ACCESS) "
         + "VALUES (?, ?, ?, ?, 'MON ADRESSE',5)";
@@ -303,7 +313,67 @@ public class DAO {
            }
 
        return list;
-    }    
+    }
+    public Livre getBookFromId(int book_id)
+    {
+       PreparedStatement preparedStatement = null;
+       ResultSet resultSet = null;
+       Livre livre = new Livre();
+       try {
+           preparedStatement = initialisationRequetePreparee( this.connection, SQL_SELECT_BOOK_FROM_ID, true, book_id);
+           resultSet = preparedStatement.executeQuery();
+
+           if(resultSet.next()) {
+               livre = map_livre(resultSet);
+           }
+           resultSet.close();
+           } catch(SQLException sqle) {
+               System.err.println("" + sqle);
+           }
+
+       return livre;
+    }
+    public boolean insertCommands(Commandes command)
+    {
+        IDCommand+=1;
+    	boolean ok = false;
+        PreparedStatement preparedStatement = null;
+         try {
+          
+            for(Entry<Livre, Integer>entry : command.getAllbooks().entrySet())
+            {
+                System.out.println("key : " + entry.getKey());
+                System.out.println("value : " + entry.getValue());
+                preparedStatement = initialisationRequetePreparee( this.connection, SQL_INSERT_LIST_PRODUCT_COMMAND, true, IDCommand,entry.getKey().getId(), entry.getValue());
+                int statut = preparedStatement.executeUpdate();
+             
+            /* Analyse du statut retourné par la requête d'insertion */
+            if ( statut == 0 ) {
+              System.out.println( "Echec de l'enregistrement, aucune ligne ajoutee dans la table." );
+            }
+            else
+            	ok = true;
+            }   
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        }
+         try {
+             System.out.println("date : " + Dates.date());
+                preparedStatement = initialisationRequetePreparee( this.connection, SQL_INSERT_COMMAND, true, IDCommand, command.getEmail(), Dates.date(),  command.getPrix_total());
+                int statut = preparedStatement.executeUpdate();
+             
+            /* Analyse du statut retourné par la requête d'insertion */
+            if ( statut == 0 ) {
+              System.out.println( "Echec de l'enregistrement, aucune ligne ajoutee dans la table." );
+            }
+            else
+            	ok = true;
+               
+        } catch ( SQLException e ) {
+            e.printStackTrace();
+        } 
+         return ok;
+    }        
     public static PreparedStatement initialisationRequetePreparee(Connection connexion, String sql, boolean returnGeneratedKeys, Object... objets ) throws SQLException 
     {
         PreparedStatement preparedStatement = connexion.prepareStatement( sql, returnGeneratedKeys ? Statement.RETURN_GENERATED_KEYS : Statement.NO_GENERATED_KEYS );

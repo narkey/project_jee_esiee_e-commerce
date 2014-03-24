@@ -17,15 +17,13 @@ public class Commandes {
     //attributs pour la commande
     private int id;
     private String email;
-    private String date_commande;
     private float prix_total;
     //attributs pour la liste des produits de la commande
-    private HashMap<Integer, Integer> allBooks = new HashMap<Integer,Integer>(); //contient id du livre en key et la quantite en value
+    private HashMap<Livre, Integer> allBooks = new HashMap<Livre,Integer>(); //contient id du livre en key et la quantite en value
     
     public Commandes() {
         this.id = -1;
         this.email = "";
-        this.date_commande = "";
         this.prix_total = (float) -1.1;
     }
 
@@ -49,14 +47,6 @@ public class Commandes {
         this.email = email;
     }
 
-    public String getDate_commande() {
-        return date_commande;
-    }
-
-    public void setDate_commande(String date_commande) {
-        this.date_commande = date_commande;
-    }
-
     public float getPrix_total() {
         return prix_total;
     }
@@ -65,13 +55,22 @@ public class Commandes {
         this.prix_total = prix_total;
     }
 
-    public HashMap<Integer, Integer>getAllbooks() {
+    public HashMap<Livre, Integer>getAllbooks() {
         return allBooks;
     }
     
-    public void addCommand(int livre_id, int quantity)
+    public void addCommand(Livre livre, int quantity)
     {
-        this.allBooks.put(livre_id, quantity);
+        this.allBooks.put(livre, quantity);
+    }
+    
+    public void setQuantity(Livre livre, int quantity)
+    {
+        for(Livre i : this.allBooks.keySet())
+        {
+            if(i.getId()==livre.getId())
+                this.allBooks.put(i, quantity);
+        }
     }
     
 }

@@ -8,6 +8,8 @@ package com.esiee.projet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -94,10 +96,17 @@ public class ControleurServlet extends HttpServlet {
             this.getServletContext().getRequestDispatcher("/WEB-INF/confirmation.jsp").forward(request, response);
             break;
         case "/VoirPanier" :
-            /*
-            HttpSession session2 = request.getSession();
-            Utilisateur user = (Utilisateur)session2.getAttribute( "sessionUtilisateur");
-            ArrayList<Livre> cartBooks = new ArrayList<Livre>();
+            
+            HttpSession sessionUser = request.getSession();
+            Utilisateur user = (Utilisateur)sessionUser.getAttribute( "sessionUtilisateur");
+            Commandes cart_book = (Commandes)sessionUser.getAttribute("cart_book");
+            if(cart_book!=null)
+            {
+                cart_book.setEmail(user.getEmail());
+                request.setAttribute("list_book", cart_book.getAllbooks());
+            }
+                this.getServletContext().getRequestDispatcher("/WEB-INF/achat.jsp").forward(request, response);
+            /*ArrayList<Livre> cartBooks = new ArrayList<Livre>();
             cartBooks = dao.getChartBook(user.getEmail());
             System.out.println("ici = "+user.getEmail());
             for(Livre object : cartBooks)
@@ -105,7 +114,6 @@ public class ControleurServlet extends HttpServlet {
                 System.out.println("la : " + object.toString());
             }
             request.setAttribute("cartBooks", cartBooks);
-            this.getServletContext().getRequestDispatcher("/WEB-INF/achat.jsp").forward(request, response);
             */
             
             break;
@@ -226,13 +234,42 @@ public class ControleurServlet extends HttpServlet {
                        session_book .setAttribute("cart_book", cart_book );
                    }
                        
-                   cart_book.addCommand(book_id, quantity);
-                   for(int i : cart_book.getAllbooks().keySet())
+                   cart_book.addCommand(dao.getBookFromId(book_id), quantity);
+                   for(Livre i : cart_book.getAllbooks().keySet())
                    {
                        System.out.println("valeur de la clé" + i);
                    }
                    
                    response.sendRedirect("Catalogue");
+                   break;
+               case "achat":
+                   HttpSession sessionAchat= request.getSession();
+                   cart_book = (Commandes)sessionAchat.getAttribute("cart_book");
+                   int qty = Integer.parseInt(request.getParameter("quantity"));
+                   int bookId = Integer.parseInt(request.getParameter("book_id"));
+                   user = (Utilisateur)sessionAchat.getAttribute("sessionUtilisateur");
+                   if(request.getParameter("bouton").equals("maj"))
+                   {                    
+                        if(cart_book!=null)
+                        {
+                            cart_book.setQuantity(dao.getBookFromId(bookId), qty);
+                            request.setAttribute("list_book", cart_book.getAllbooks());
+                        }
+                        this.getServletContext().getRequestDispatcher("/WEB-INF/achat.jsp").forward(request, response);
+                   }
+               
+                   else
+                   {
+                       int total = 0;
+          
+                   for(Entry<Livre, Integer>entry : cart_book.getAllbooks().entrySet())
+                   {
+                           total+=entry.getKey().getPrix()*entry.getValue();
+                       }
+                       cart_book.setPrix_total(total);
+                      cart_book.setEmail(user.getEmail());
+                      dao.insertCommands(cart_book);
+                   }
                    break;
                default:
                    this.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
