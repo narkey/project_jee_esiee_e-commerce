@@ -18,6 +18,9 @@
     
     <body>
         <div class="container container-fluid">
+       <c:if test="${ empty sessionScope.cart_book }">
+           <p class="text-warning">Merci d'avoir commandé ! Vous pouvez revenir à la page d'<a href="index.jsp">accueil</a> pour commander de nouveaux livres !</p>
+        </c:if>
     <h1>Confirmation de la demande</h1>
         <br/><br/><br/>
          <%-- Vérification de la présence d'un objet utilisateur en session --%>

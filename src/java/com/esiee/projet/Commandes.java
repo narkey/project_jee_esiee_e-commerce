@@ -8,6 +8,7 @@ package com.esiee.projet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  *
@@ -24,7 +25,7 @@ public class Commandes {
     public Commandes() {
         this.id = -1;
         this.email = "";
-        this.prix_total = (float) -1.1;
+        this.prix_total = (float) 0;
     }
 
     public Commandes(String email) {
@@ -61,7 +62,41 @@ public class Commandes {
     
     public void addCommand(Livre livre, int quantity)
     {
-        this.allBooks.put(livre, quantity);
+        boolean newItem = true;
+        for(Livre i : this.allBooks.keySet())
+        {
+            if(i.getId()==livre.getId())
+            {
+                newItem = false;
+                //this.allBooks.remove(i);
+                
+                this.allBooks.put(i, this.allBooks.get(i)+quantity);
+                this.prix_total += i.getPrix()*quantity;
+            }
+        }
+        if(newItem)
+        {
+            this.prix_total += livre.getPrix();
+            this.allBooks.put(livre, 1);
+        }
+    }
+
+    public void delCommand(Livre livre)
+    {
+       
+        Iterator<Livre> itLivre = this.allBooks.keySet().iterator();
+        while(itLivre.hasNext())
+        {
+            
+            Livre tmp = itLivre.next();
+            if(tmp.getId()==livre.getId())
+            {   
+                System.out.println("ilivre trouver");
+                this.prix_total -= livre.getPrix()*this.allBooks.get(tmp);
+                itLivre.remove();
+            }
+        }
+
     }
     
     public void setQuantity(Livre livre, int quantity)
